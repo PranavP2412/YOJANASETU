@@ -1,6 +1,6 @@
 import express, { urlencoded } from "express";
 import  dotenv from "dotenv";
-import UserRouter from "./src/routes/user.routes.js";
+import authRouter from "./src/routes/auth.routes.js";
 import cors from "cors";
 import connectDB from "./src/db/index.js";
 import  healthCheckRouter  from "./src/routes/healthcheck.routes.js";
@@ -39,7 +39,7 @@ app.use(cors({
 
 
 
-app.use("/api/v1/user",UserRouter)
+app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/healthcheck",healthCheckRouter)
 
 connectDB()
