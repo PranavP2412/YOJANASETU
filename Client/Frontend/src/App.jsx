@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import LandingPage from './pages/Landingpage';
 import SchemeDiscovery from './pages/schemediscovery';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
 
           {/* When URL is /schemes, show Search Page */}
           <Route path="/schemes" element={<SchemeDiscovery />} />
+          <Route path="/login" element={<LoginPage/>} />
         </Routes>
       </div>
     </Router>
