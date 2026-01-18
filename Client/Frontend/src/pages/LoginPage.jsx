@@ -1,146 +1,168 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Lock, AlertCircle, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import axiosClient from '../api/axiosClient';
 
 const LoginPage = () => {
     const navigate = useNavigate();
 
-    // State for form inputs
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
 
-    // State for UI feedback
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false); 
 
-    // Handle Input Change
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        // Clear error when user starts typing again
         if (error) setError(null);
     };
 
-    // Handle Form Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
-            // POST request to your backend
             const response = await axiosClient.post('/auth/login', formData);
 
-            // If successful:
-            // 1. Save the token (Local Storage is easiest for now)
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+            const { accessToken, user } = response.data.data; 
 
-            // 2. Redirect to Dashboard or Home
-            navigate('/schemes');
+            localStorage.setItem('token', accessToken);
+            localStorage.setItem('user', JSON.stringify(user));
+
+            setSuccess(true);
+
+            setTimeout(() => {
+                navigate('/schemes');
+            }, 1000);
 
         } catch (err) {
-            // Handle Errors
             console.error(err);
-            const errorMessage = err.response?.data?.message || "Login failed. Please try again.";
-
-            // Specific check for Email Verification
-            if (errorMessage.toLowerCase().includes('verify')) {
-                setError("Please verify your email address before logging in.");
-            } else {
-                setError(errorMessage);
-            }
+            const errorMessage = err.response?.data?.message || "Something went wrong. Please try again.";
+            setError(errorMessage);
+            setSuccess(false);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 bg-gray-50">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+            
+            {/* Icon Removed from here */}
 
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
-                    <p className="text-gray-500 mt-2">Sign in to access YojanaSetu</p>
-                </div>
-
-                {/* Error Alert */}
-                {error && (
-                    <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-start gap-3">
-                        <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 shrink-0" />
-                        <p className="text-sm text-red-700">{error}</p>
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                    
+                    {/* Header Section */}
+                    <div className="mb-8 text-center">
+                        {/* Changed text-2xl to text-3xl for larger size */}
+                        <h2 className="text-4xl font-extrabold text-gray-900">
+                            Welcome Back
+                        </h2>
+                        <p className="mt-2 text-sm text-gray-600">
+                            Sign in to access YojanaSetu
+                        </p>
                     </div>
-                )}
-
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
-
-                    {/* Email Input */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <div className="relative">
-                            <input
-                                type="email"
-                                name="email"
-                                required
-                                value={formData.email}
-                                onChange={handleChange}
-                                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-                                placeholder="name@company.com"
-                            />
-                            <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                    
+                    {/* Error Message */}
+                    {error && (
+                        <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start gap-3">
+                            <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
+                            <p className="text-sm text-red-700">{error}</p>
                         </div>
+                    )}
+
+                    {/* Success Message */}
+                    {success && (
+                        <div className="mb-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-md flex items-start gap-3">
+                            <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
+                            <p className="text-sm text-green-700">Login successful! Redirecting...</p>
+                        </div>
+                    )}
+
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Email address
+                            </label>
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Mail className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    name="email"
+                                    type="email"
+                                    required
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                    placeholder="you@example.com"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className="flex items-center justify-between">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Password
+                                </label>
+                                <div className="text-sm">
+                                    <Link 
+                                        to="/forgot-password" 
+                                        className="font-medium text-blue-600 hover:text-blue-500 hover:underline"
+                                    >
+                                        Forgot password?
+                                    </Link>
+                                </div>
+                            </div>
+                            
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Lock className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    name="password"
+                                    type="password"
+                                    required
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                    placeholder="••••••••"
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading || success}
+                            className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 className="h-5 w-5 animate-spin" /> Signing in...
+                                </>
+                            ) : success ? (
+                                <>
+                                    <CheckCircle2 className="h-5 w-5" /> Success
+                                </>
+                            ) : (
+                                <>
+                                    Sign In <ArrowRight className="h-5 w-5" />
+                                </>
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="mt-8 text-center text-sm text-gray-500">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="text-blue-600 font-bold hover:underline">
+                            Create account
+                        </Link>
                     </div>
-
-                    {/* Password Input */}
-                    <div>
-                        <div className="flex justify-between items-center mb-1">
-                            <label className="block text-sm font-medium text-gray-700">Password</label>
-                            <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                                Forgot password?
-                            </Link>
-                        </div>
-                        <div className="relative">
-                            <input
-                                type="password"
-                                name="password"
-                                required
-                                value={formData.password}
-                                onChange={handleChange}
-                                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-                                placeholder="••••••••"
-                            />
-                            <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                        </div>
-                    </div>
-
-                    {/* Submit Button */}
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                    >
-                        {loading ? (
-                            <>
-                                <Loader2 className="h-5 w-5 animate-spin" /> Signing in...
-                            </>
-                        ) : (
-                            <>
-                                Sign In <ArrowRight className="h-5 w-5" />
-                            </>
-                        )}
-                    </button>
-                </form>
-
-                {/* Footer */}
-                <div className="mt-8 text-center text-sm text-gray-500">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="text-blue-600 font-bold hover:underline">
-                        Create account
-                    </Link>
                 </div>
             </div>
         </div>
