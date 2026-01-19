@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import axiosClient from '../api/axiosClient';
-import SchemeCard from "../components/schemes/SchemeCard";
+import axiosClient from '../../api/axiosClient';
+import SchemeCard from "../schemes/SchemeCard";
 import { Search, Filter } from 'lucide-react';
 
 const SchemeDiscovery = () => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, AlertCircle, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
-import axiosClient from '../api/axiosClient';
+import axiosClient from '../../api/axiosClient';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const LoginPage = () => {
 
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false); 
+    const [success, setSuccess] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +28,7 @@ const LoginPage = () => {
         try {
             const response = await axiosClient.post('/auth/login', formData);
 
-            const { accessToken, user } = response.data.data; 
+            const { accessToken, user } = response.data.data;
 
             localStorage.setItem('token', accessToken);
             localStorage.setItem('user', JSON.stringify(user));
@@ -51,12 +51,12 @@ const LoginPage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            
+
             {/* Icon Removed from here */}
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                    
+
                     {/* Header Section */}
                     <div className="mb-8 text-center">
                         {/* Changed text-2xl to text-3xl for larger size */}
@@ -67,7 +67,7 @@ const LoginPage = () => {
                             Sign in to access YojanaSetu
                         </p>
                     </div>
-                    
+
                     {/* Error Message */}
                     {error && (
                         <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start gap-3">
@@ -111,15 +111,15 @@ const LoginPage = () => {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <Link 
-                                        to="/forgot-password" 
+                                    <Link
+                                        to="/forgot-password"
                                         className="font-medium text-blue-600 hover:text-blue-500 hover:underline"
                                     >
                                         Forgot password?
                                     </Link>
                                 </div>
                             </div>
-                            
+
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <Lock className="h-5 w-5 text-gray-400" />
