@@ -14,9 +14,10 @@ router.get("/verify-email/:verificationToken", verifyEmail);
 router.post("/reset-password-email",resetPasswordEmail);
 router.post("/reset-password/:resetToken",userResetPasswordValidator(),validate,resetPassword);
 router.post("/refresh-token",refreshAccessToken)
-router.post("/resend-emailVerification",verifyJWT,resendEmailVerification)
+
+
 
 //secure routes
 router.post("/logout",verifyJWT,logout);
-
+router.post("/resend-emailVerification",verifyJWT,resendEmailVerification)
 export default router;
