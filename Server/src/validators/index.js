@@ -39,4 +39,16 @@ const userLoginValidator = ()=>{
     ]
 }
 
-export {userRegisterValidator, userLoginValidator}
+const userResetPasswordValidator = () => {
+    return [
+        body("newPassword")
+            .trim()
+            .notEmpty()
+            .withMessage("New password is required.")
+            .isLength({ min: 8 })
+            .withMessage("Password must be at least 8 characters long."),
+    ];
+};
+
+
+export {userRegisterValidator, userLoginValidator, userResetPasswordValidator}

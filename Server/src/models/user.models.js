@@ -22,6 +22,10 @@ avatar: {
         trim:true,
         index:true
     },
+    FullName:{
+        type:String,
+        required:true,
+    },
     email:{
         type:String,
         required:true,
