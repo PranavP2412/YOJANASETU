@@ -1,5 +1,5 @@
 import express from "express";
-import {login, logout, resgisterUser} from "../controllers/auth.controllers.js"
+import {login, logout, resetPassword, resetPasswordEmail, resgisterUser} from "../controllers/auth.controllers.js"
 import { userRegisterValidator, userLoginValidator } from "../validators/index.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -11,5 +11,11 @@ router.post("/register",userRegisterValidator(),validate,resgisterUser)
 
 router.post("/login",userLoginValidator(),validate,login);
 router.post("/logout",verifyJWT,logout);
+router.post("/verify-email/:verificationToken", verifyEmail);
+router.post("/reset-password-email",resetPasswordEmail);
+router.post("/reset-password/:resetToken",resetPassword);
+
+
+
 
 export default router;

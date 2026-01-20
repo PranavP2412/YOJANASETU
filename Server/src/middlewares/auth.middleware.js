@@ -21,8 +21,7 @@ export const verifyJWT = asyncHandler(async (req,res,next)=>{
         req.user = user; // when it goes to the next midlleware or controller it passes the user in req so they can access it through the user
         next()
     } catch (error) {
-        throw new ApiError(401,"Invalid access token!")
-        
+        throw new ApiError(401,"Invalid access token!");
     }
 
 })
