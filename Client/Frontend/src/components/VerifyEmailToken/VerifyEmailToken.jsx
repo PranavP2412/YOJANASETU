@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Loader2, CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
+//
 
 const VerifyEmailToken = () => {
   const { token } = useParams();

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Lock, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import axiosClient from '../api/axiosClient';
+import axiosClient from '../../api/axiosClient';
 
 const ResetPasswordPage = () => {
     const [searchParams] = useSearchParams();
