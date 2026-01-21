@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import './VerifyEmailToken.css'; // Assuming you'll create a CSS file for styling
+//
 
 const VerifyEmailToken = () => {
   const { token } = useParams();
