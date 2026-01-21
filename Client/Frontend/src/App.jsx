@@ -6,6 +6,7 @@ import LoginPage from './components/Login/LoginPage';
 import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken'; // Make sure to import this
 import ForgotPasswordPage from './components/forgotpassword/ForgotPasswordPage';
 import ResetPasswordPage from './components/resetpassword/ResetPasswordPage';
+import ProfilePage from './components/Profile/profile';
 
 // 1. Create a Layout Component that holds the Navbar
 const MainLayout = () => {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
             <Route path="/Resetpassword" element={<ResetPasswordPage />} />
+            <Route path="/Profile" element={<ProfilePage />} />
             
           </Route>
 
