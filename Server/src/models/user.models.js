@@ -2,6 +2,7 @@ import mongoose, {Schema} from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import crypto from "crypto"
+import { type, userInfo } from "os";
 
 const userSchema = new Schema({
 avatar: {
@@ -56,6 +57,10 @@ avatar: {
     },
     emailVerficationExpiry:{
         type:Date
+    },
+    userInfo:{
+        type:Boolean,
+        default:false
     }
 },{
     timestamps:true
@@ -78,7 +83,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 userSchema.methods.generateAccessToken = function(){
     return jwt.sign({
         _id: this._id,
-        email: this.email
+        userInfo:this.userInfo
     },
     process.env.ACCESS_TOKEN_SECRET,
     {expiresIn: process.env.ACCESS_TOKEN_EXPIRY}
