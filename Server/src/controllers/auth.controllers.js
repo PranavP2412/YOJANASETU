@@ -5,6 +5,7 @@ import { asyncHandler } from "../utils/async-handler.js"
 import { emailVerificationMailgenContent, forgotPasswordMailgenContent, sendEmail } from "../utils/mail.js";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 
 
@@ -48,7 +49,7 @@ const resgisterUser = asyncHandler(async (req, res) => {
     await sendEmail({
         email: user?.email,
         subject: "Please verify your email!!",
-        mailgenContent: emailVerificationMailgenContent(user.username, `http:localhost:5173/verify-email/${unHashedToken}`)
+        mailgenContent: emailVerificationMailgenContent(user.username, `http://localhost:5173/verify-email/${unHashedToken}`)
     })
 
     const createdUser = await User.findById(user._id).select(
@@ -120,7 +121,7 @@ const logout = asyncHandler(async (req, res) => {
 })
 
 const verifyEmail = asyncHandler(async (req, res) => {
-    const { verificationToken } = req.params;
+    const { Token } = req.params;
 
     let hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex")
 
@@ -139,13 +140,13 @@ const verifyEmail = asyncHandler(async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     return res.status(200).json(new ApiResponse(200, {
-        isEmailVerified: True
+        isEmailVerified: true
     }, "Email verified successfully!"));
 });
 
 const resetPasswordEmail = asyncHandler(async (req, res) => {
     const { email } = req.body;
-    const user = User.findOne({
+    const user = await User.findOne({
         email: email
     });
     if (!user) {
@@ -232,7 +233,7 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
             throw new ApiError(400, "Refresh Token is expired!")
         }
 
-        const {refreshToken: newRefreshToken, accessToken} = AccessAndRefreshToken(user._id);
+        const {refreshToken: newRefreshToken, accessToken} = await AccessAndRefreshToken(user._id);
         user.refreshToken = newRefreshToken;
         await user.save();
 
@@ -243,7 +244,7 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
 
         return res.status(200).cookie("accessToken",accessToken,options).cookie("refreshToken",newRefreshToken,options)
         .json(
-            ApiResponse(200,{
+            new ApiResponse(200,{
                 accessToken, newRefreshToken
             },"AccessToken is refreshed")
         )
