@@ -3,7 +3,8 @@ import Navbar from './components/layout/Navbar';
 import LandingPage from './components/LandingPage/Landingpage';
 import SchemeDiscovery from './components/AllScheme/Schemediscovery';
 import LoginPage from './components/Login/LoginPage';
-import VerifyEmailToken from './components/VerifyEmailToken'; // Make sure to import this
+import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken'; // Make sure to import this
+import RegisterPage from './components/Register/RegisterPage';
 
 // 1. Create a Layout Component that holds the Navbar
 const MainLayout = () => {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/schemes" element={<SchemeDiscovery />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Route>
 
           {/* Group 2: Routes WITHOUT Navbar (Standalone) */}

@@ -6,7 +6,7 @@ import axiosClient from '../../api/axiosClient';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
-        name: '',
+        FullName: '',
         username: '',
         email: '',
         password: ''
@@ -31,6 +31,7 @@ const RegisterPage = () => {
             await axiosClient.post('/auth/register', formData);
             setSuccessMode(true); // Switch to "Check your email" view
         } catch (err) {
+            console.error("Registration Error:", err);
             setError(err.response?.data?.message || "Registration failed. Please try again.");
         } finally {
             setLoading(false);
@@ -79,8 +80,8 @@ const RegisterPage = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <div className="relative">
                             <input
-                                type="text" name="name" required
-                                value={formData.name} onChange={handleChange}
+                                type="text" name="FullName" required
+                                value={formData.FullName} onChange={handleChange}
                                 className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 outline-none"
                                 placeholder="John Doe"
                             />
@@ -94,7 +95,7 @@ const RegisterPage = () => {
                         <div className="relative">
                             <input
                                 type="text" name="username" required
-                                value={formData.businessName} onChange={handleChange}
+                                value={formData.username} onChange={handleChange}
                                 className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 outline-none"
                                 placeholder="John_Doe"
                             />

@@ -14,7 +14,7 @@ dotenv.config({
 
 
 // basic configuration
-app.use(express.json({limit:"16kb"}));
+app.use(express.json());
 app.use(express.urlencoded({extended:true, limit:"16kb"})); // this is for when the data is to be taken from the url
 app.use(express.static("public"))
 app.use(cookieParser());
@@ -33,10 +33,8 @@ app.use((err, req, res, next) => {
 // cors configuration
 
 app.use(cors({
-    origin:process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
-    credentials:true,
-    methods:["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders:["Authorization","Content-Type"]
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173", // Allow your frontend URL
+    credentials: true // Allow cookies to be sent
 }))
 
 
