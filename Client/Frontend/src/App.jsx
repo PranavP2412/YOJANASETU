@@ -3,14 +3,13 @@ import Navbar from './components/layout/Navbar';
 import LandingPage from './components/LandingPage/Landingpage';
 import SchemeDiscovery from './components/AllScheme/Schemediscovery';
 import LoginPage from './components/Login/LoginPage';
-import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken'; // Make sure to import this
+import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken';
 import ForgotPasswordPage from './components/forgotpassword/ForgotPasswordPage';
 import ResetPasswordPage from './components/resetpassword/ResetPasswordPage';
 import ProfilePage from './components/Profile/profile';
 import RegisterPage from './components/Register/RegisterPage';
-import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken';
 import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
-import ResetPassword from './components/Resetpassword/ResetPasswordPage';
+import ResetPassword from './components/resetpassword/ResetPasswordPage';
 
 // 1. Layout Component (Contains Navbar)
 const MainLayout = () => {

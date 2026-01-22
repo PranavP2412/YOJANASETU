@@ -73,6 +73,7 @@ const login = asyncHandler(async (req, res) => {
     if (!user) {
         throw new ApiError(500, "This email ID is not registered!", []);
     }
+
     const checkPassword = await user.isPasswordCorrect(password);
     if (!checkPassword) {
         throw new ApiError(400, "Please give correct password", []);
