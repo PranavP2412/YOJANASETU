@@ -3,16 +3,17 @@ import Navbar from './components/layout/Navbar';
 import LandingPage from './components/LandingPage/Landingpage';
 import SchemeDiscovery from './components/AllScheme/Schemediscovery';
 import LoginPage from './components/Login/LoginPage';
-import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken'; // Make sure to import this
-import ForgotPasswordPage from './components/forgotpassword/ForgotPasswordPage';
-import ResetPasswordPage from './components/resetpassword/ResetPasswordPage';
+import RegisterPage from './components/Register/RegisterPage';
+import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken';
+import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
+import ResetPassword from './components/Resetpassword/ResetPasswordPage';
 
-// 1. Create a Layout Component that holds the Navbar
+// 1. Layout Component (Contains Navbar)
 const MainLayout = () => {
   return (
     <>
       <Navbar />
-      <Outlet /> {/* This renders the child route's element (e.g., LandingPage) */}
+      <Outlet />
     </>
   );
 };
@@ -21,24 +22,24 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50 font-sans">
-        
         <Routes>
-          {/* Group 1: Routes WITH Navbar (Wrapped in MainLayout) */}
+
+          {/* Group 1: Routes WITH Navbar (Everything inside here gets the top bar) */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/schemes" element={<SchemeDiscovery />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
-            <Route path="/Resetpassword" element={<ResetPasswordPage />} />
-            
+            <Route path="/register" element={<RegisterPage />} />
+
+            {/* ✅ MOVED HERE: Now these will show the Navbar */}
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Route>
 
-          {/* Group 2: Routes WITHOUT Navbar (Standalone) */}
-          {/* Note: the path includes :token parameter for the dynamic link */}
+          {/* Group 2: Routes WITHOUT Navbar */}
           <Route path="/verify-email/:token" element={<VerifyEmailToken />} />
-          
+
         </Routes>
-        
       </div>
     </Router>
   );
