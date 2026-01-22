@@ -1,48 +1,80 @@
-import { Calendar, CheckCircle, ArrowRight, Building2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Building2, UserCheck, Clock } from 'lucide-react';
 
-const SchemeCard = ({ scheme }) => {
+const SchemeCard = ({ scheme, data }) => {
+    const item = scheme || data;
+
     return (
-        <div className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-4">
-                <div className="bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                    <Building2 className="h-3 w-3" />
-                    {scheme.ministry || "Ministry of MSME"}
+        <div className="group flex flex-col h-full bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-200 border-t-4 border-t-blue-700 transition-all duration-300 overflow-hidden relative">
+
+            {/* 1. Header: Ministry & Status */}
+            <div className="px-6 pt-5 flex justify-between items-start">
+                <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                    <Building2 className="h-3.5 w-3.5 text-blue-600" />
+                    {item.ministry}
+                </div>
+
+                {/* Status Badge */}
+                <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 ${item.deadline === 'Open' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                    }`}>
+                    {item.deadline === 'Open' ? (
+                        <><span className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" /> Active</>
+                    ) : (
+                        <><Clock className="h-3 w-3" /> Ends {item.deadline}</>
+                    )}
                 </div>
             </div>
 
-            {/* Content */}
-            <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                {scheme.title}
-            </h3>
-            <p className="text-gray-500 text-sm line-clamp-2 mb-4 flex-grow">
-                {scheme.description}
-            </p>
+            {/* 2. Main Content */}
+            <div className="px-6 py-4 flex-grow flex flex-col">
 
-            {/* The Hook (Green Box) */}
-            <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3 mb-4">
-                <div className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-                    <p className="text-sm font-medium text-emerald-800">
-                        {scheme.simplifiedDescription || "Benefits include financial assistance and subsidies."}
-                    </p>
+                {/* Title */}
+                <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug group-hover:text-blue-700 transition-colors">
+                    {item.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-2">
+                    {item.description}
+                </p>
+
+                {/* --- IMPROVED ELIGIBILITY SECTION --- */}
+                <div className="mt-auto bg-blue-50/50 rounded-xl p-4 border border-blue-100/50 relative overflow-hidden">
+                    {/* Decorative Background Icon */}
+                    <UserCheck className="absolute -right-2 -bottom-2 h-12 w-12 text-blue-100 opacity-50 rotate-12" />
+
+                    <div className="relative z-10">
+                        <p className="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                            <UserCheck className="h-3.5 w-3.5" /> Who can apply?
+                        </p>
+                        <p className="text-sm font-medium text-slate-700 leading-snug">
+                            {item.eligibility}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Tags (Minimalist Grey) */}
+                <div className="flex flex-wrap gap-2 mt-4">
+                    {item.tags && item.tags.slice(0, 3).map((tag, index) => (
+                        <span
+                            key={index}
+                            className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-semibold bg-gray-100 text-gray-600 uppercase tracking-wide"
+                        >
+                            {tag}
+                        </span>
+                    ))}
                 </div>
             </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
-                <div className="flex items-center text-xs text-gray-500">
-                    <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                    {scheme.deadline ? new Date(scheme.deadline).toLocaleDateString() : "Ongoing"}
-                </div>
-                <a
-                    href={scheme.applicationUrl || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 text-sm font-semibold flex items-center hover:gap-2 transition-all"
+            {/* 3. Footer Action */}
+            <div className="p-6 pt-0">
+                <Link
+                    to={`/scheme/${item._id}`}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-white text-gray-900 border-2 border-gray-100 font-bold py-3 rounded-xl hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all duration-300 group/btn"
                 >
-                    View Details <ArrowRight className="ml-1 h-4 w-4" />
-                </a>
+                    View Scheme Details
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                </Link>
             </div>
         </div>
     );
