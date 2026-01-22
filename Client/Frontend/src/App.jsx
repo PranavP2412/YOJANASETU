@@ -3,7 +3,9 @@ import Navbar from './components/layout/Navbar';
 import LandingPage from './components/LandingPage/Landingpage';
 import SchemeDiscovery from './components/AllScheme/Schemediscovery';
 import LoginPage from './components/Login/LoginPage';
-import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken';
+import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken'; // Make sure to import this
+import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
+import ResetPassword from './components/resetpassword/ResetPasswordPage';
 import ProfilePage from './components/Profile/profile';
 import RegisterPage from './components/Register/RegisterPage';
 import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
@@ -30,6 +32,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/schemes" element={<SchemeDiscovery />} />
             <Route path="/login" element={<LoginPage />} />
+            
             <Route path="/Profile" element={<ProfilePage />} />
             
             <Route path="/register" element={<RegisterPage />} />
