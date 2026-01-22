@@ -1,36 +1,50 @@
 import { useEffect, useState } from 'react';
 import axiosClient from '../../api/axiosClient';
 import SchemeCard from "../schemes/SchemeCard";
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const SchemeDiscovery = () => {
     const [schemes, setSchemes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    
+    // Pagination State
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        // In a real app, you would debounce this search
-        const fetchSchemes = async () => {
-            try {
-                const response = await axiosClient.get('/schemes');
-                setSchemes(response.data.data || []);
-            } catch (error) {
-                console.error("Error fetching schemes:", error);
-                // Fallback data for demo purposes if backend is offline
-                setSchemes([
-                    { _id: 1, title: 'PMEGP Scheme', description: 'Credit linked subsidy program.', simplifiedDescription: 'Get up to 35% subsidy on projects.', deadline: '2025-03-31' },
-                    { _id: 2, title: 'CGTMSE', description: 'Collateral free loans for MSEs.', simplifiedDescription: 'Loans up to ₹2 Crore without collateral.', deadline: null }
-                ]);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSchemes();
-    }, []);
+       const fetchSchemes = async () => {
+    setLoading(true);
+    try {
+        const response = await axiosClient.get(`/schemes?page=${page}`);
+        
+        // --- ADD THIS DEBUG LOG ---
+        console.log("🔥 FULL API RESPONSE:", response);
+        console.log("📂 Data Location:", response.data?.data?.schemes);
+        // --------------------------
 
-    const filteredSchemes = schemes.filter(s =>
-        s.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+        setSchemes(response.data.data.schemes || []);
+        setTotalPages(response.data.data.pagination.totalPages);
+    } catch (error) {
+        console.error("❌ Error fetching schemes:", error);
+    } finally {
+        setLoading(false);
+    }
+};
+
+        fetchSchemes();
+        
+        // Scroll to top of results when page changes
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [page]); // Re-run effect when 'page' changes
+
+    const handlePrevious = () => {
+        if (page > 1) setPage(prev => prev - 1);
+    };
+
+    const handleNext = () => {
+        if (page < totalPages) setPage(prev => prev + 1);
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
@@ -42,7 +56,7 @@ const SchemeDiscovery = () => {
                         Search through our verified database of grants, loans, and subsidies.
                     </p>
 
-                    {/* Search Bar */}
+                    {/* Search Bar (Visual Only for now as backend search is disabled) */}
                     <div className="mt-8 max-w-2xl mx-auto relative">
                         <input
                             type="text"
@@ -61,7 +75,8 @@ const SchemeDiscovery = () => {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 min-h-[500px]">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-gray-800">
-                            {filteredSchemes.length} Schemes Found
+                            {/* Showing count for current page */}
+                            Showing Page {page} of {totalPages}
                         </h2>
                         <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium">
                             <Filter className="h-4 w-4" /> Filter
@@ -73,11 +88,46 @@ const SchemeDiscovery = () => {
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
                         </div>
                     ) : (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filteredSchemes.map((scheme) => (
-                                <SchemeCard key={scheme._id} scheme={scheme} />
-                            ))}
-                        </div>
+                        <>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                                {schemes.map((scheme) => (
+                                    <SchemeCard key={scheme._id} scheme={scheme} />
+                                ))}
+                            </div>
+
+                            {/* Pagination Controls */}
+                            {schemes.length > 0 && (
+                                <div className="flex justify-center items-center gap-4 pt-6 border-t border-gray-100">
+                                    <button
+                                        onClick={handlePrevious}
+                                        disabled={page === 1}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition
+                                            ${page === 1 
+                                                ? 'bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200' 
+                                                : 'bg-white text-gray-700 hover:bg-gray-50 hover:border-blue-500 border-gray-300'
+                                            }`}
+                                    >
+                                        <ChevronLeft className="h-4 w-4" /> Previous
+                                    </button>
+
+                                    <span className="text-sm font-medium text-gray-600">
+                                        Page {page} of {totalPages}
+                                    </span>
+
+                                    <button
+                                        onClick={handleNext}
+                                        disabled={page === totalPages}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition
+                                            ${page === totalPages 
+                                                ? 'bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200' 
+                                                : 'bg-white text-gray-700 hover:bg-gray-50 hover:border-blue-500 border-gray-300'
+                                            }`}
+                                    >
+                                        Next <ChevronRight className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

@@ -6,6 +6,7 @@ import connectDB from "./src/db/index.js";
 import  healthCheckRouter  from "./src/routes/healthcheck.routes.js";
 import cookieParser from "cookie-parser";
 import userInfoRouter from "./src/routes/userInfo.routes.js"
+import schemesRouter from "./src/routes/schemes.routes.js"
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use(cors({
 app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/healthcheck",healthCheckRouter)
 app.use("/api/v1/userInfo",userInfoRouter)
+app.use("/api/v1/schemes",schemesRouter)
 
 connectDB()
 .then(app.listen(process.env.PORT,()=>{
