@@ -8,9 +8,6 @@ import ForgotPasswordPage from './components/forgotpassword/ForgotPasswordPage';
 import ResetPasswordPage from './components/resetpassword/ResetPasswordPage';
 import ProfilePage from './components/Profile/profile';
 import RegisterPage from './components/Register/RegisterPage';
-import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken';
-import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
-import ResetPassword from './components/Resetpassword/ResetPasswordPage';
 
 // 1. Layout Component (Contains Navbar)
 const MainLayout = () => {
