@@ -3,6 +3,10 @@ import Navbar from './components/layout/Navbar';
 import LandingPage from './components/LandingPage/Landingpage';
 import SchemeDiscovery from './components/AllScheme/Schemediscovery';
 import LoginPage from './components/Login/LoginPage';
+import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken'; // Make sure to import this
+import ForgotPasswordPage from './components/forgotpassword/ForgotPasswordPage';
+import ResetPasswordPage from './components/resetpassword/ResetPasswordPage';
+import ProfilePage from './components/Profile/profile';
 import RegisterPage from './components/Register/RegisterPage';
 import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken';
 import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
@@ -29,6 +33,10 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/schemes" element={<SchemeDiscovery />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
+            <Route path="/Resetpassword" element={<ResetPasswordPage />} />
+            <Route path="/Profile" element={<ProfilePage />} />
+            
             <Route path="/register" element={<RegisterPage />} />
 
             {/* ✅ MOVED HERE: Now these will show the Navbar */}
