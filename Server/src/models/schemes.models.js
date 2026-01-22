@@ -4,7 +4,7 @@ const schemeSchema = new Schema({
     schemeName: {
         type: String,
         required: true,
-        unique: true, // Prevents duplicate schemes
+        unique: true,
         trim: true
     },
     ministry: {
@@ -13,7 +13,7 @@ const schemeSchema = new Schema({
         trim: true
     },
     category: {
-        type: String, // e.g., "Credit", "Infrastructure", "Technology"
+        type: String,
         required: true,
         trim: true
     },
@@ -30,7 +30,7 @@ const schemeSchema = new Schema({
         required: true
     },
     tags: {
-        type: [String], // Array of strings for easy searching (e.g. ["Loan", "Startup"])
+        type: [String],
         default: []
     },
     applicationLink: {
@@ -45,7 +45,6 @@ const schemeSchema = new Schema({
     timestamps: true
 });
 
-// Indexing for faster search performance
 schemeSchema.index({ schemeName: 'text', description: 'text', tags: 'text' });
 
 export const Scheme = mongoose.model("Scheme", schemeSchema);
