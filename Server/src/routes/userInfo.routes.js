@@ -8,6 +8,6 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.post("/userInfoRegister",verifyJWT,userInfoValidator(),validate,userInfoRegistering);
-router.post("/userInfoGet",verifyJWT,getUserInfo);
+router.get("/userInfoGet",verifyJWT,getUserInfo);
 
 export default router;

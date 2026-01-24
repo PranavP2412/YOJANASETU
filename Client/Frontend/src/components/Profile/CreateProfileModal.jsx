@@ -31,7 +31,7 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                 state: initialData.state || "",
                 sector: initialData.sector || "Manufacturing",
                 stage: initialData.stage || "Idea/Prototype",
-                turnover: initialData.turnover || "",
+                turnover: initialData.turnover !== undefined ? initialData.turnover : "",
                 needs: initialData.needs || []
             });
         }
@@ -44,15 +44,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
     const stages = ["Idea/Prototype", "Startup", "Existing Business"];
     const needsOptions = ["Loan", "Subsidy", "Training", "Exhibition", "Certification", "Infrastructure", "Technology"];
 
-    // ✅ New Turnover Options
-    const turnoverOptions = [
-        "< 20 Lakhs",
-        "20 Lakhs - 1 Cr",
-        "1 Cr - 5 Cr",
-        "5 Cr - 50 Cr",
-        "50 Cr - 250 Cr",
-        "> 250 Cr"
-    ];
 
     const states = [
         "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam",
@@ -97,7 +88,7 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
         }
 
         try {
-            await axiosClient.post('/userInfo/userInfoPost', formData);
+            await axiosClient.post('/userInfo/userInfoRegister', formData);
             onSuccess();
             onClose();
         } catch (err) {
@@ -199,18 +190,33 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                             </div>
 
                             {/* ✅ Updated Turnover Dropdown */}
+                            {/* ✅ CORRECTED: Exact Number Input for Accurate Recommendations */}
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Annual Turnover</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                                    Annual Turnover (in Rupees)
+                                </label>
                                 <div className="relative">
-                                    <select
-                                        name="turnover" value={formData.turnover} onChange={handleChange}
-                                        className="w-full rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-blue-600 outline-none appearance-none bg-white"
-                                    >
-                                        <option value="">Select Range...</option>
-                                        {turnoverOptions.map(t => <option key={t} value={t}>{t}</option>)}
-                                    </select>
-                                    <IndianRupee className="absolute right-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    <input
+                                        type="number"
+                                        name="turnover"
+                                        value={formData.turnover}
+                                        onChange={handleChange}
+                                        placeholder="e.g. 5000000"
+                                        className="w-full rounded-lg border border-gray-300 p-2.5 pl-10 focus:ring-2 focus:ring-blue-600 outline-none transition"
+                                        min="0"
+                                    />
+                                    <IndianRupee className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+
+                                    {/* Optional: Helper text to convert numbers to readable format */}
+                                    {formData.turnover && (
+                                        <p className="absolute right-3 top-3 text-xs text-green-600 font-medium pointer-events-none bg-white px-1">
+                                            ₹ {Number(formData.turnover).toLocaleString('en-IN')}
+                                        </p>
+                                    )}
                                 </div>
+                                <p className="text-[10px] text-gray-400 mt-1">
+                                    Enter exact amount for better scheme matching.
+                                </p>
                             </div>
                         </div>
 
@@ -222,8 +228,8 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                                     <button
                                         key={need} type="button" onClick={() => toggleNeed(need)}
                                         className={`px-3 py-1.5 rounded-full text-sm font-medium border transition flex items-center gap-1 ${formData.needs.includes(need)
-                                                ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                                                : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
+                                            ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                                            : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
                                             }`}
                                     >
                                         {formData.needs.includes(need) && <CheckCircle className="h-3 w-3" />}

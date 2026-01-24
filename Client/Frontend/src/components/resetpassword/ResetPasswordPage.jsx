@@ -22,15 +22,15 @@ const ResetPasswordPage = () => {
             return;
         }
 
-        if (passwords.newPassword.length < 6) {
-            setError("Password must be at least 6 characters");
+        if (passwords.newPassword.length < 8) {
+            setError("Password must be at least 8 characters");
             return;
         }
 
         setLoading(true);
         try {
             // Send token and new password to backend
-            await axiosClient.post('/auth/reset-password', {
+            await axiosClient.post(`/auth/reset-password/${token}`, {
                 token,
                 newPassword: passwords.newPassword
             });

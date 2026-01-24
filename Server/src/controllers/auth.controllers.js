@@ -124,7 +124,7 @@ const logout = asyncHandler(async (req, res) => {
 const verifyEmail = asyncHandler(async (req, res) => {
     const { Token } = req.params;
 
-    let hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex")
+    let hashedToken = crypto.createHash("sha256").update(Token).digest("hex")
 
     const user = await User.findOne({
         emailVerficationToken: hashedToken,
@@ -164,7 +164,7 @@ const resetPasswordEmail = asyncHandler(async (req, res) => {
     await sendEmail({
         email: email,
         subject: "Please reset your password",
-        mailgenContent: forgotPasswordMailgenContent(user.username, `${req.protocol}://${req.get("host")}/api/v1/users/reset-password/${unHashedToken}`)
+        mailgenContent: forgotPasswordMailgenContent(user.username, `http://localhost:5173/verify-email/${unHashedToken}`)
     })
 
     return res.status(201).json(new ApiResponse(200,{}, "User password reset link has been sent to your email"));
@@ -256,6 +256,15 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
     }
 })
 
+const currentUser = asyncHandler(async(req,res)=>{
+    const user = req.user;
+    if(!user){
+        throw new ApiError(404,"Invalid access!");
+    }
+    return res.status(200).json(new ApiResponse(200,user,"Data sent successfully!"));
+
+})
+
 
 
 
@@ -267,5 +276,6 @@ export {
     resetPasswordEmail,
     resetPassword,
     resendEmailVerification,
-    refreshAccessToken
+    refreshAccessToken,
+    currentUser
 };

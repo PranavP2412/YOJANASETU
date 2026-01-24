@@ -46,9 +46,6 @@ const VerifyEmailPage = () => {
                         <h2 className="text-2xl font-bold text-gray-900">The email has been sent to you</h2>
                         <p className="text-gray-500 mt-2 mb-6">Please Verify your email.</p>
                         <p className="text-gray-500 mt-2 mb-6">We are eager to update you about the schemes that you didnt even heard about.</p>
-                        <Link to="/login" className="text-blue-600 font-bold hover:underline">
-                            Return to Login
-                        </Link>
                     </>
                 )}
 

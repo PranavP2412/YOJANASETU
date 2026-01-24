@@ -1,5 +1,5 @@
 import express from "express";
-import {login, logout, refreshAccessToken, resendEmailVerification, resetPassword, resetPasswordEmail, resgisterUser, verifyEmail} from "../controllers/auth.controllers.js"
+import {currentUser, login, logout, refreshAccessToken, resendEmailVerification, resetPassword, resetPasswordEmail, resgisterUser, verifyEmail} from "../controllers/auth.controllers.js"
 import { userRegisterValidator, userLoginValidator, userResetPasswordValidator } from "../validators/index.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -19,5 +19,6 @@ router.post("/refresh-token",refreshAccessToken)
 
 //secure routes
 router.post("/logout",verifyJWT,logout);
-router.post("/resend-emailVerification",verifyJWT,resendEmailVerification)
+router.post("/resend-emailVerification",verifyJWT,resendEmailVerification);
+router.get("/current-user",verifyJWT,currentUser);
 export default router;

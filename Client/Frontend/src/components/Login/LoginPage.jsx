@@ -30,7 +30,8 @@ const LoginPage = () => {
 
             const { accessToken, user } = response.data.data;
 
-            localStorage.setItem('token', accessToken);
+            // New (Matches axiosClient)
+            localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('user', JSON.stringify(user));
 
             setSuccess(true);

@@ -1,19 +1,68 @@
-import { Link } from 'react-router-dom';
-import { BookOpen, User, Menu, X, HelpCircle, LogOut, Settings, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // 1. Import useLocation
+import { BookOpen, User, Menu, X, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import axiosClient from '../../api/axiosClient';
 
 const Navbar = () => {
-    // State for the new Left Sidebar
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation(); // 2. Get current location
     
-    // State for the existing Mobile Menu (Right side)
+    // State for UI
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // 1. PLACEHOLDER DATA: Replace this with your actual User Context/State later
-    const userData = {
-        fullName: "Pranava", // Replace with req.user.FullName
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pranava", // Replace with user.avatar.url
-        email: "pranava@example.com"
+    // State for Data
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    // 3. UPDATED EFFECT: Runs on load AND when location changes (e.g. after login)
+    useEffect(() => {
+        const checkUserStatus = async () => {
+            setLoading(true);
+            
+            // A. Check Local Storage FIRST (Instant UI update)
+            const storedUser = localStorage.getItem('user');
+            const token = localStorage.getItem('accessToken');
+
+            if (storedUser && token) {
+                setUser(JSON.parse(storedUser)); // Show user immediately from storage
+            }
+
+            // B. Verify with Backend (Background check)
+            try {
+                if (token) {
+                    const response = await axiosClient.get('/auth/current-user'); 
+                    setUser(response.data.data);
+                    // Update storage with freshest data
+                    localStorage.setItem('user', JSON.stringify(response.data.data)); 
+                } else {
+                    setUser(null);
+                }
+            } catch (error) {
+                console.log("Session expired or invalid");
+                setUser(null);
+                localStorage.removeItem('user');
+                localStorage.removeItem('accessToken');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkUserStatus();
+    }, [location.pathname]); // 4. Dependency: Re-run this whenever URL changes!
+
+    // HANDLE LOGOUT
+    const handleLogout = async () => {
+        try {
+            await axiosClient.post('/auth/logout'); 
+            localStorage.removeItem('user');
+            localStorage.removeItem('accessToken'); // Clear token
+            setUser(null); 
+            setIsSidebarOpen(false); 
+            navigate('/login'); 
+        } catch (error) {
+            console.error("Logout failed", error);
+        }
     };
 
     return (
@@ -23,18 +72,18 @@ const Navbar = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         
-                        {/* LEFT SECTION: Hamburger + Logo */}
+                        {/* LEFT SECTION */}
                         <div className="flex items-center gap-4">
+                            {/* Hamburger Button - Only show if user exists */}
+                            {user && (
+                                <button 
+                                    onClick={() => setIsSidebarOpen(true)}
+                                    className="p-2 -ml-2 rounded-md text-gray-600 hover:bg-gray-100 hover:text-blue-600 focus:outline-none"
+                                >
+                                    <Menu className="h-6 w-6" />
+                                </button>
+                            )}
                             
-                            {/* 2. THE TRIGGER: Opens the Left Sidebar */}
-                            <button 
-                                onClick={() => setIsSidebarOpen(true)}
-                                className="p-2 -ml-2 rounded-md text-gray-600 hover:bg-gray-100 hover:text-blue-600 focus:outline-none"
-                            >
-                                <Menu className="h-6 w-6" />
-                            </button>
-
-                            {/* Logo */}
                             <Link to="/" className="flex items-center gap-2">
                                 <div className="bg-blue-600 p-1.5 rounded-lg">
                                     <BookOpen className="h-6 w-6 text-white" />
@@ -43,23 +92,41 @@ const Navbar = () => {
                             </Link>
                         </div>
 
-                        {/* CENTER SECTION: Desktop Links */}
+                        {/* CENTER SECTION */}
                         <div className="hidden md:flex items-center space-x-8">
                             <Link to="/" className="text-gray-600 hover:text-blue-600 font-medium transition">Home</Link>
                             <Link to="/schemes" className="text-gray-600 hover:text-blue-600 font-medium transition">Schemes</Link>
                             <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium transition">About</Link>
                         </div>
 
-                        {/* RIGHT SECTION: Login / Mobile Toggle */}
+                        {/* RIGHT SECTION */}
                         <div className="flex items-center gap-4">
-                            <Link
-                                to="/login"
-                                className="hidden md:flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition shadow-sm hover:shadow-md"
-                            >
-                                <User className="h-4 w-4" /> Login
-                            </Link>
+                            {loading ? (
+                                <div className="h-8 w-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin"></div>
+                            ) : user ? (
+                                // LOGGED IN STATE
+                                <button 
+                                    onClick={() => setIsSidebarOpen(true)}
+                                    className="hidden md:flex items-center gap-2 hover:bg-gray-50 p-1 pr-3 rounded-full border border-transparent hover:border-gray-200 transition"
+                                >
+                                    <img 
+                                        src={user.avatar || "Client/Frontend/public/the-new-discord-default-profile-pictures-v0-8ugv2z5fdj7f1.webp"} 
+                                        alt="Avatar" 
+                                        className="h-8 w-8 rounded-full object-cover"
+                                    />
+                                    <span className="text-sm font-medium text-gray-700">{user.FullName}</span>
+                                </button>
+                            ) : (
+                                // LOGGED OUT STATE
+                                <Link
+                                    to="/login"
+                                    className="hidden md:flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition shadow-sm hover:shadow-md"
+                                >
+                                    <User className="h-4 w-4" /> Login
+                                </Link>
+                            )}
 
-                            {/* Mobile Menu Button (Right Side - for standard links) */}
+                            {/* Mobile Menu Toggle */}
                             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden text-gray-600">
                                 <Menu className="h-6 w-6" />
                             </button>
@@ -68,79 +135,82 @@ const Navbar = () => {
                 </div>
             </nav>
 
-            {/* --- 3. THE LEFT SIDEBAR (DRAWER) --- */}
-            
-            {/* Overlay (Dark background) */}
-            {isSidebarOpen && (
-                <div 
-                    className="fixed inset-0 bg-black/50 z-50 transition-opacity"
-                    onClick={() => setIsSidebarOpen(false)}
-                ></div>
-            )}
+            {/* --- SIDEBAR DRAWER --- */}
+            {/* Render Sidebar DOM only if user exists */}
+            {user && (
+                <>
+                    {/* Overlay */}
+                    <div 
+                        className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${
+                            isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                        }`}
+                        onClick={() => setIsSidebarOpen(false)}
+                    ></div>
 
-            {/* Sidebar Content */}
-            <div className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                
-                {/* Header: Close Button */}
-                <div className="flex justify-end p-4">
-                    <button onClick={() => setIsSidebarOpen(false)} className="text-gray-500 hover:text-red-500">
-                        <X className="h-6 w-6" />
-                    </button>
-                </div>
+                    {/* Sidebar Content */}
+                    <div className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+                        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                    }`}>
+                        
+                        <div className="flex justify-end p-4">
+                            <button onClick={() => setIsSidebarOpen(false)} className="text-gray-500 hover:text-red-500">
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
 
-                {/* USER PROFILE SECTION */}
-                <div className="px-6 pb-6 border-b border-gray-100 flex flex-col items-center text-center">
-                    <div className="relative">
-                        <img 
-                            src={userData.avatar} 
-                            alt="Profile" 
-                            className="w-20 h-20 rounded-full border-4 border-blue-50 shadow-md mb-3 object-cover"
-                        />
-                        <div className="absolute bottom-3 right-0 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+                        {/* Profile Info */}
+                        <div className="px-6 pb-6 border-b border-gray-100 flex flex-col items-center text-center">
+                            <div className="relative">
+                                <img 
+                                    src={user.avatar || `https://ui-avatars.com/api/?name=${user.FullName}&background=random`} 
+                                    alt="Profile" 
+                                    className="w-20 h-20 rounded-full border-4 border-blue-50 shadow-md mb-3 object-cover"
+                                />
+                                <div className="absolute bottom-3 right-0 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900">{user.FullName}</h3>
+                            <p className="text-sm text-gray-500">{user.email}</p>
+                        </div>
+
+                        {/* Menu Items */}
+                        <div className="p-4 space-y-2">
+                            <Link 
+                                to="/profile" 
+                                className="flex items-center justify-between p-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition group"
+                                onClick={() => setIsSidebarOpen(false)}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <User className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
+                                    <span className="font-medium">My Profile</span>
+                                </div>
+                                <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-400" />
+                            </Link>
+
+                            <Link 
+                                to="/help" 
+                                className="flex items-center justify-between p-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition group"
+                                onClick={() => setIsSidebarOpen(false)}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <HelpCircle className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
+                                    <span className="font-medium">Help & Support</span>
+                                </div>
+                                <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-400" />
+                            </Link>
+
+                            <div className="my-2 border-t border-gray-100"></div>
+
+                            <button 
+                                onClick={handleLogout}
+                                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 text-gray-700 hover:text-red-600 transition group"
+                            >
+                                <LogOut className="h-5 w-5 text-gray-400 group-hover:text-red-500" />
+                                <span className="font-medium">Logout</span>
+                            </button>
+                        </div>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">{userData.fullName}</h3>
-                    <p className="text-sm text-gray-500">{userData.email}</p>
-                </div>
-
-                {/* MENU OPTIONS */}
-                <div className="p-4 space-y-2">
-                    <Link 
-                        to="/Profile" 
-                        className="flex items-center justify-between p-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition group"
-                        onClick={() => setIsSidebarOpen(false)}
-                    >
-                        <div className="flex items-center gap-3">
-                            <User className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
-                            <span className="font-medium">My Profile</span>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-400" />
-                    </Link>
-
-                    <Link 
-                        to="/help" 
-                        className="flex items-center justify-between p-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition group"
-                        onClick={() => setIsSidebarOpen(false)}
-                    >
-                        <div className="flex items-center gap-3">
-                            <HelpCircle className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
-                            <span className="font-medium">Help & Support</span>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-400" />
-                    </Link>
-
-                    <div className="my-2 border-t border-gray-100"></div>
-
-                    <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 text-gray-700 hover:text-red-600 transition group">
-                        <LogOut className="h-5 w-5 text-gray-400 group-hover:text-red-500" />
-                        <span className="font-medium">Logout</span>
-                    </button>
-                </div>
-
-                {/* Footer Info */}
-                <div className="absolute bottom-0 w-full p-6 bg-gray-50 border-t border-gray-100 text-center">
-                    <p className="text-xs text-gray-400">YojanaSetu v1.0.0</p>
-                </div>
-            </div>
+                </>
+            )}
         </>
     );
 };
