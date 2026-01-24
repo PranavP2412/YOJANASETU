@@ -37,10 +37,10 @@ function App() {
 
             {/* ✅ MOVED HERE: Now these will show the Navbar */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
           </Route>
 
           {/* Group 2: Routes WITHOUT Navbar */}
+          <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
           <Route path="/verify-email/:token" element={<VerifyEmailToken />} />
 
         </Routes>

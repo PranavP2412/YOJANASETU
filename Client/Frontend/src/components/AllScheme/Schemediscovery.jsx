@@ -1,38 +1,52 @@
 import { useEffect, useState } from 'react';
-// FIX 1: Ensure these paths are correct for YOUR folder structure!
 import axiosClient from '../../api/axiosClient';
 import SchemeCard from "../schemes/SchemeCard"; 
-import { Search, Filter, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { Search, Filter, ChevronLeft, ChevronRight, Loader2, Sparkles, RefreshCcw } from 'lucide-react';
 
 const SchemeDiscovery = () => {
     const [schemes, setSchemes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null); // Added Error State
+    const [error, setError] = useState(null);
     
     // UI State
     const [searchTerm, setSearchTerm] = useState("");
-    const [filterCategory, setFilterCategory] = useState("All");
+    const [isRecommendedMode, setIsRecommendedMode] = useState(false); // Toggle for "Recommended" vs "All"
 
     // Pagination State
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
+    // --- FETCH DATA ---
     useEffect(() => {
         const fetchSchemes = async () => {
             setLoading(true);
             setError(null);
             try {
-                console.log("Fetching schemes page:", page); // DEBUG LOG
-                const response = await axiosClient.get(`/schemes?page=${page}`);
-                
-                console.log("API Response:", response.data); // DEBUG LOG
+                let endpoint = '/schemes';
+                let params = { page }; // Default params
 
-                // FIX 2: Safety checks using optional chaining (?.)
+                // Logic: Decide which API to hit
+                if (isRecommendedMode) {
+                    // 1. Fetch Recommended Schemes
+                    endpoint = '/schemes/recommend'; // Assuming this endpoint exists on your backend
+                } else {
+                    // 2. Fetch All Schemes (with Search)
+                    endpoint = '/schemes';
+                    if (searchTerm) {
+                        params.search = searchTerm; // Add search query to params
+                    }
+                }
+
+                console.log(`Fetching: ${endpoint}`, params); // Debug Log
+
+                const response = await axiosClient.get(endpoint, { params });
+                
                 const fetchedSchemes = response.data?.data?.schemes || [];
                 const fetchedPagination = response.data?.data?.pagination;
 
                 setSchemes(fetchedSchemes);
                 setTotalPages(fetchedPagination?.totalPages || 1);
+
             } catch (err) {
                 console.error("Error fetching schemes:", err);
                 setError("Failed to load schemes. Please try again later.");
@@ -42,9 +56,31 @@ const SchemeDiscovery = () => {
             }
         };
 
-        fetchSchemes();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [page]); 
+        // Debounce search to prevent too many API calls while typing
+        const timeoutId = setTimeout(() => {
+            fetchSchemes();
+        }, 500);
+
+        return () => clearTimeout(timeoutId);
+
+    }, [page, searchTerm, isRecommendedMode]); 
+
+
+    // --- HANDLERS ---
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        setPage(1); // Reset to page 1 on new search
+        if (isRecommendedMode) {
+            setIsRecommendedMode(false); // Switch back to "All" mode if user starts searching
+        }
+    };
+
+    const toggleRecommended = () => {
+        setIsRecommendedMode(!isRecommendedMode);
+        setSearchTerm(""); // Clear search when switching modes
+        setPage(1);
+    };
 
     const handlePrevious = () => {
         if (page > 1) setPage(prev => prev - 1);
@@ -54,7 +90,6 @@ const SchemeDiscovery = () => {
         if (page < totalPages) setPage(prev => prev + 1);
     };
 
-    // FIX 3: If there is a critical error, show it instead of crashing
     if (error) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center text-red-600">
@@ -62,9 +97,9 @@ const SchemeDiscovery = () => {
                 <p>{error}</p>
                 <button 
                     onClick={() => window.location.reload()}
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
                 >
-                    Reload Page
+                    <RefreshCcw className="h-4 w-4" /> Reload Page
                 </button>
             </div>
         );
@@ -75,34 +110,46 @@ const SchemeDiscovery = () => {
             {/* Header */}
             <div className="bg-blue-900 py-16">
                 <div className="max-w-7xl mx-auto px-4 text-center">
-                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Explore Government Schemes</h1>
+                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                        {isRecommendedMode ? "Schemes Curated For You" : "Explore Government Schemes"}
+                    </h1>
                     <p className="text-blue-200 max-w-2xl mx-auto text-lg">
-                        Search through our verified database of grants, loans, and subsidies.
+                        {isRecommendedMode 
+                            ? "Based on your business profile, sector, and turnover."
+                            : "Search through our verified database of grants, loans, and subsidies."
+                        }
                     </p>
 
-                    {/* Search & Filter */}
-                    <div className="mt-8 max-w-2xl mx-auto relative flex flex-col md:flex-row gap-4 items-center">
-                        <div className="relative w-full">
+                    {/* Search & Recommend Button Row */}
+                    <div className="mt-8 max-w-3xl mx-auto flex flex-col md:flex-row gap-4 items-center">
+                        
+                        {/* Search Input */}
+                        <div className="relative w-full flex-grow">
                             <input
                                 type="text"
-                                placeholder="Search..."
+                                placeholder="Search by name, sector, or keyword..."
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={handleSearchChange}
                                 className="w-full pl-12 pr-4 py-4 rounded-xl shadow-lg border-0 focus:ring-2 focus:ring-blue-500 outline-none"
                             />
                             <Search className="absolute left-4 top-4 h-6 w-6 text-gray-400" />
                         </div>
 
-                        <select
-                            value={filterCategory}
-                            onChange={(e) => setFilterCategory(e.target.value)}
-                            className="w-full md:w-48 px-4 py-4 rounded-xl shadow-lg border-0 focus:ring-2 focus:ring-blue-500 outline-none bg-white cursor-pointer"
+                        {/* Recommend Toggle Button */}
+                        <button
+                            onClick={toggleRecommended}
+                            className={`w-full md:w-auto px-6 py-4 rounded-xl shadow-lg font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap
+                                ${isRecommendedMode 
+                                    ? "bg-white text-blue-900 border-2 border-blue-500" 
+                                    : "bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:from-amber-500 hover:to-orange-600"
+                                }`}
                         >
-                            <option value="All">All Categories</option>
-                            <option value="Manufacturing">Manufacturing</option>
-                            <option value="Finance">Finance</option>
-                            <option value="Agriculture">Agriculture</option>
-                        </select>
+                            {isRecommendedMode ? (
+                                <>Show All Schemes</>
+                            ) : (
+                                <><Sparkles className="h-5 w-5" /> Recommended for You</>
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -112,7 +159,7 @@ const SchemeDiscovery = () => {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 min-h-[500px]">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-gray-800">
-                            Page {page} of {totalPages}
+                            {isRecommendedMode ? "Your Matches" : `Page ${page} of ${totalPages}`}
                         </h2>
                         <div className="flex items-center gap-2 text-gray-500 text-sm">
                             <Filter className="h-4 w-4" />
@@ -127,20 +174,21 @@ const SchemeDiscovery = () => {
                     ) : (
                         <>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                                {/* FIX 4: Ensure schemes is an array before mapping */}
                                 {Array.isArray(schemes) && schemes.length > 0 ? (
                                     schemes.map((scheme) => (
                                         <SchemeCard key={scheme._id} scheme={scheme} />
                                     ))
                                 ) : (
-                                    <div className="col-span-full text-center py-10 text-gray-500">
-                                        No schemes found.
+                                    <div className="col-span-full flex flex-col items-center justify-center py-16 text-gray-500">
+                                        <Search className="h-12 w-12 text-gray-300 mb-3" />
+                                        <p className="text-lg font-medium">No schemes found.</p>
+                                        <p className="text-sm">Try adjusting your search or profile details.</p>
                                     </div>
                                 )}
                             </div>
 
-                            {/* Pagination Controls */}
-                            {schemes.length > 0 && (
+                            {/* Pagination Controls (Only show if not in Recommend mode) */}
+                            {schemes.length > 0 && !isRecommendedMode && (
                                 <div className="flex justify-center items-center gap-4 pt-6 border-t border-gray-100">
                                     <button
                                         onClick={handlePrevious}

@@ -164,7 +164,7 @@ const resetPasswordEmail = asyncHandler(async (req, res) => {
     await sendEmail({
         email: email,
         subject: "Please reset your password",
-        mailgenContent: forgotPasswordMailgenContent(user.username, `http://localhost:5173/verify-email/${unHashedToken}`)
+        mailgenContent: forgotPasswordMailgenContent(user.username, `http://localhost:5173/reset-password/${unHashedToken}`)
     })
 
     return res.status(201).json(new ApiResponse(200,{}, "User password reset link has been sent to your email"));

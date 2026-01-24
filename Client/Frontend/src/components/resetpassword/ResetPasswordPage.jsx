@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+// 1. CHANGE THIS IMPORT: Use 'useParams' instead of 'useSearchParams'
+import { useParams, useNavigate } from 'react-router-dom'; 
 import { Lock, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import axiosClient from '../../api/axiosClient';
 
 const ResetPasswordPage = () => {
-    const [searchParams] = useSearchParams();
+    // 2. CHANGE THIS LINE: Extract the token from the URL path
+    const { resetToken } = useParams(); 
+    
     const navigate = useNavigate();
-    const token = searchParams.get('token'); // Get token from URL
 
+    // Use 'resetToken' (from params) instead of 'token' (from search)
     const [passwords, setPasswords] = useState({ newPassword: '', confirmPassword: '' });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -29,24 +32,24 @@ const ResetPasswordPage = () => {
 
         setLoading(true);
         try {
-            // Send token and new password to backend
-            await axiosClient.post(`/auth/reset-password/${token}`, {
-                token,
+            // 3. CHECK THIS URL: Ensure it matches your backend route prefix 
+            // Previous code used '/users', this uses '/auth'. verify which one is correct!
+            await axiosClient.post(`/auth/reset-password/${resetToken}`, { 
                 newPassword: passwords.newPassword
             });
             setSuccess(true);
-
-            // Auto-redirect to login after 3 seconds
             setTimeout(() => navigate('/login'), 3000);
 
         } catch (err) {
+            console.error(err);
             setError(err.response?.data?.message || "Failed to reset password. The link may be expired.");
         } finally {
             setLoading(false);
         }
     };
 
-    if (!token) return <div className="text-center mt-20 text-red-500">Invalid Link</div>;
+    // 4. Update check to use 'resetToken'
+    if (!resetToken) return <div className="text-center mt-20 text-red-500">Invalid Link (No Token Found)</div>;
 
     if (success) {
         return (
