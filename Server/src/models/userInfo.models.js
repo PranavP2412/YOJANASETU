@@ -40,10 +40,28 @@ const userInfoSchema = new Schema({
         type: [String],
         enum: ["Loan", "Subsidy", "Training", "Exhibition", "Certification", "Infrastructure", "Technology"],
         default: []
+    },
+    bookmarks:{
+        type: [String],
+        default:[]
     }
 
 }, {
     timestamps: true
 });
+
+userInfoSchema.methods.toggleBookmark = async function (schemeId) {
+    const idStr = schemeId.toString();
+    if (this.bookmarks.includes(idStr)) {
+        this.bookmarks = this.bookmarks.filter(id => id !== idStr);
+    } else {
+        this.bookmarks.push(idStr);
+    }
+
+    await this.save();
+    
+    return this.bookmarks;
+};
+
 
 export const UserInfo = mongoose.model("UserInfo", userInfoSchema);

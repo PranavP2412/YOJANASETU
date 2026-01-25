@@ -1,11 +1,12 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom'; // 1. Import useLocation
-import { BookOpen, User, Menu, X, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom'; 
+// 1. IMPORT Bookmark Icon
+import { BookOpen, User, Menu, X, HelpCircle, LogOut, ChevronRight, Bookmark } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axiosClient from '../../api/axiosClient';
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const location = useLocation(); // 2. Get current location
+    const location = useLocation(); 
     
     // State for UI
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -15,25 +16,21 @@ const Navbar = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // 3. UPDATED EFFECT: Runs on load AND when location changes (e.g. after login)
     useEffect(() => {
         const checkUserStatus = async () => {
             setLoading(true);
             
-            // A. Check Local Storage FIRST (Instant UI update)
             const storedUser = localStorage.getItem('user');
             const token = localStorage.getItem('accessToken');
 
             if (storedUser && token) {
-                setUser(JSON.parse(storedUser)); // Show user immediately from storage
+                setUser(JSON.parse(storedUser)); 
             }
 
-            // B. Verify with Backend (Background check)
             try {
                 if (token) {
                     const response = await axiosClient.get('/auth/current-user'); 
                     setUser(response.data.data);
-                    // Update storage with freshest data
                     localStorage.setItem('user', JSON.stringify(response.data.data)); 
                 } else {
                     setUser(null);
@@ -49,14 +46,13 @@ const Navbar = () => {
         };
 
         checkUserStatus();
-    }, [location.pathname]); // 4. Dependency: Re-run this whenever URL changes!
+    }, [location.pathname]); 
 
-    // HANDLE LOGOUT
     const handleLogout = async () => {
         try {
             await axiosClient.post('/auth/logout'); 
             localStorage.removeItem('user');
-            localStorage.removeItem('accessToken'); // Clear token
+            localStorage.removeItem('accessToken'); 
             setUser(null); 
             setIsSidebarOpen(false); 
             navigate('/login'); 
@@ -74,7 +70,6 @@ const Navbar = () => {
                         
                         {/* LEFT SECTION */}
                         <div className="flex items-center gap-4">
-                            {/* Hamburger Button - Only show if user exists */}
                             {user && (
                                 <button 
                                     onClick={() => setIsSidebarOpen(true)}
@@ -92,10 +87,18 @@ const Navbar = () => {
                             </Link>
                         </div>
 
-                        {/* CENTER SECTION */}
+                        {/* CENTER SECTION - Added Bookmarks Here */}
                         <div className="hidden md:flex items-center space-x-8">
                             <Link to="/" className="text-gray-600 hover:text-blue-600 font-medium transition">Home</Link>
                             <Link to="/schemes" className="text-gray-600 hover:text-blue-600 font-medium transition">Schemes</Link>
+                            
+                            {/* ✅ NEW: Saved Schemes Link in Navbar (Only if logged in) */}
+                            {user && (
+                                <Link to="/bookmarks" className="text-gray-600 hover:text-blue-600 font-medium transition flex items-center gap-1">
+                                    Saved
+                                </Link>
+                            )}
+
                             <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium transition">About</Link>
                         </div>
 
@@ -136,10 +139,8 @@ const Navbar = () => {
             </nav>
 
             {/* --- SIDEBAR DRAWER --- */}
-            {/* Render Sidebar DOM only if user exists */}
             {user && (
                 <>
-                    {/* Overlay */}
                     <div 
                         className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${
                             isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -147,7 +148,6 @@ const Navbar = () => {
                         onClick={() => setIsSidebarOpen(false)}
                     ></div>
 
-                    {/* Sidebar Content */}
                     <div className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
                         isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
                     }`}>
@@ -182,6 +182,19 @@ const Navbar = () => {
                                 <div className="flex items-center gap-3">
                                     <User className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
                                     <span className="font-medium">My Profile</span>
+                                </div>
+                                <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-400" />
+                            </Link>
+
+                            {/* ✅ NEW: Saved Schemes in Sidebar */}
+                            <Link 
+                                to="/userInfo/bookmarks" 
+                                className="flex items-center justify-between p-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition group"
+                                onClick={() => setIsSidebarOpen(false)}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <Bookmark className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
+                                    <span className="font-medium">Saved Schemes</span>
                                 </div>
                                 <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-400" />
                             </Link>

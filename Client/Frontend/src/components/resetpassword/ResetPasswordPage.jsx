@@ -32,8 +32,6 @@ const ResetPasswordPage = () => {
 
         setLoading(true);
         try {
-            // 3. CHECK THIS URL: Ensure it matches your backend route prefix 
-            // Previous code used '/users', this uses '/auth'. verify which one is correct!
             await axiosClient.post(`/auth/reset-password/${resetToken}`, { 
                 newPassword: passwords.newPassword
             });

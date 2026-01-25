@@ -8,6 +8,8 @@ import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
 import ResetPassword from './components/resetpassword/ResetPasswordPage';
 import ProfilePage from './components/Profile/profile';
 import RegisterPage from './components/Register/RegisterPage';
+import SchemeDetails from './components/SchemeDetails/SchemeDetails';
+import BookmarksPage from './components/bookMarksPage/bookMarksPage';
 
 // 1. Layout Component (Contains Navbar)
 const MainLayout = () => {
@@ -37,6 +39,8 @@ function App() {
 
             {/* ✅ MOVED HERE: Now these will show the Navbar */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/scheme/:id" element={<SchemeDetails />} />
+            <Route path='/userInfo/bookmarks' element={<BookmarksPage />}/>
           </Route>
 
           {/* Group 2: Routes WITHOUT Navbar */}

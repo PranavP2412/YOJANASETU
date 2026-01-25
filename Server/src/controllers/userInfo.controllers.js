@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/api-response.js";
 import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { validationResult } from "express-validator";
+import { Scheme } from "../models/schemes.models.js";
 
 const userInfoRegistering = asyncHandler(async (req, res) => {
     const errors = validationResult(req);
@@ -71,4 +72,27 @@ const getUserInfo = asyncHandler(async (req, res) => {
     );
 });
 
-export { userInfoRegistering, getUserInfo };
+const getBookmarkedSchemes = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    // 1. Find User Profile to get the list of IDs
+    const userProfile = await UserInfo.findOne({ userId });
+
+    if (!userProfile || userProfile.bookmarks.length === 0) {
+        return res.status(200).json(
+            new ApiResponse(200, [], "No bookmarks found")
+        );
+    }
+
+    // 2. Find all Schemes where the _id is IN the bookmarks array
+    // This converts the list of IDs into actual Scheme objects
+    const bookmarkedSchemes = await Scheme.find({
+        _id: { $in: userProfile.bookmarks }
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, bookmarkedSchemes, "Bookmarked schemes fetched successfully")
+    );
+});
+
+export { userInfoRegistering, getUserInfo,getBookmarkedSchemes };
