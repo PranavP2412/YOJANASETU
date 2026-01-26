@@ -107,7 +107,7 @@ const ProfilePage = () => {
                             {/* Avatar Section - Pulls up into the blue area */}
                             <div className="relative -mt-20 mb-6 flex justify-between items-end">
                                 <img 
-                                    src={user?.avatar || '/the-new-discord-default-profile-pictures-v0-8ugv2z5fdj7f1.webp'} 
+                                    src={"/Profile.png"} 
                                     alt="Avatar" 
                                     className="w-32 h-32 rounded-full border-[5px] border-white shadow-lg bg-white object-cover"
                                 />

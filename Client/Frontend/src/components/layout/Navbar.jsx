@@ -113,7 +113,7 @@ const Navbar = () => {
                                     className="hidden md:flex items-center gap-2 hover:bg-gray-50 p-1 pr-3 rounded-full border border-transparent hover:border-gray-200 transition"
                                 >
                                     <img 
-                                        src={user.avatar || "Client/Frontend/public/the-new-discord-default-profile-pictures-v0-8ugv2z5fdj7f1.webp"} 
+                                        src={"/Profile.png"} 
                                         alt="Avatar" 
                                         className="h-8 w-8 rounded-full object-cover"
                                     />
@@ -162,7 +162,7 @@ const Navbar = () => {
                         <div className="px-6 pb-6 border-b border-gray-100 flex flex-col items-center text-center">
                             <div className="relative">
                                 <img 
-                                    src={user.avatar || `https://ui-avatars.com/api/?name=${user.FullName}&background=random`} 
+                                    src={"/Profile.png"} 
                                     alt="Profile" 
                                     className="w-20 h-20 rounded-full border-4 border-blue-50 shadow-md mb-3 object-cover"
                                 />
