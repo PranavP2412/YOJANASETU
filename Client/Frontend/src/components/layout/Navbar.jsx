@@ -94,7 +94,7 @@ const Navbar = () => {
                             
                             {/* ✅ NEW: Saved Schemes Link in Navbar (Only if logged in) */}
                             {user && (
-                                <Link to="/bookmarks" className="text-gray-600 hover:text-blue-600 font-medium transition flex items-center gap-1">
+                                <Link to="/userInfo/bookmarks" className="text-gray-600 hover:text-blue-600 font-medium transition flex items-center gap-1">
                                     Saved
                                 </Link>
                             )}

@@ -122,23 +122,31 @@ const logout = asyncHandler(async (req, res) => {
 })
 
 const verifyEmail = asyncHandler(async (req, res) => {
-    const { Token } = req.params;
+    const { token } = req.params;
 
-    let hashedToken = crypto.createHash("sha256").update(Token).digest("hex")
+    // 1. Create the hash
+    let hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
+    // 2. Find the user (Variable MUST be named 'user')
     const user = await User.findOne({
         emailVerficationToken: hashedToken,
         emailVerficationExpiry: { $gt: Date.now() }
     });
 
+    // 3. Check if user was found
     if (!user) {
         throw new ApiError(400, "Invalid or expired email verification token.");
     }
 
+    // 4. Update the user
     user.isEmailVerified = true;
     user.emailVerficationToken = undefined;
     user.emailVerficationExpiry = undefined;
+
+    
     await user.save({ validateBeforeSave: false });
+
+    console.log("doneeeeeee")
 
     return res.status(200).json(new ApiResponse(200, {
         isEmailVerified: true
@@ -190,6 +198,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     user.forgotPasswordToken = undefined;
     user.forgotPasswordExpiry = undefined;
     await user.save();
+    console.log("done")
 
     return res.status(200).json(new ApiResponse(200, {}, "Password reset successfully!"));
 });
@@ -213,7 +222,7 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     await sendEmail({
         email: user?.email,
         subject: "Please verify your email!!",
-        mailgenContent: emailVerificationMailgenContent(user.username, `${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}`)
+        mailgenContent: emailVerificationMailgenContent(user.username, `http://localhost:5173/verify-email/${unHashedToken}`)
     });
 
     return res.status(200).json(new ApiResponse(200, {}, "Verification email re-sent successfully!"));

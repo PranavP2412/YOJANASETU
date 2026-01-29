@@ -51,9 +51,6 @@ const RegisterPage = () => {
                         We've sent a verification link to <span className="font-semibold text-gray-900">{formData.email}</span>.
                         Please verify your email to access the dashboard.
                     </p>
-                    <Link to="/login" className="text-blue-600 font-bold hover:underline">
-                        Back to Login
-                    </Link>
                 </div>
             </div>
         );

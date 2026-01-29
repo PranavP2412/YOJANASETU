@@ -10,7 +10,7 @@ router.post("/register",userRegisterValidator(),validate,resgisterUser)
 // sabse pehle userRegisteredValidator run hota hai uske baad validate mai saare errors jaate hai and then uske baad sab kaam hota hai
 
 router.post("/login",userLoginValidator(),validate,login);
-router.get("/verify-email/:verificationToken", verifyEmail);
+router.post("/verify-email/:token", verifyEmail);
 router.post("/reset-password-email",resetPasswordEmail);
 router.post("/reset-password/:resetToken",userResetPasswordValidator(),validate,resetPassword);
 router.post("/refresh-token",refreshAccessToken)

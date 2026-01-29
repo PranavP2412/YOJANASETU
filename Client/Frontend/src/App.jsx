@@ -11,6 +11,7 @@ import RegisterPage from './components/Register/RegisterPage';
 import SchemeDetails from './components/SchemeDetails/SchemeDetails';
 import BookmarksPage from './components/bookMarksPage/bookMarksPage';
 
+
 // 1. Layout Component (Contains Navbar)
 const MainLayout = () => {
   return (
