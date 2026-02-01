@@ -2,7 +2,6 @@ import OpenAI from "openai";
 import "dotenv/config"
 
 
-const token = process.env.OPENAI_API_KEY;
 
 export async function pleaseRecommendFunction(data) {
 
@@ -55,7 +54,7 @@ export async function pleaseRecommendFunction(data) {
 
   const client = new OpenAI({
     baseURL: "https://models.github.ai/inference",
-    apiKey: token,
+    apiKey: process.env.OPENAI_API_KEY,
   });
 
   try {
