@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-    X, User, Building2, MapPin, IndianRupee, Target,
-    Save, Loader2, AlertCircle, CheckCircle
-} from 'lucide-react';
+import {X,  IndianRupee,Save, Loader2, AlertCircle, CheckCircle} from 'lucide-react';
 import axiosClient from '../../api/axiosClient';
 
 const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
@@ -11,18 +8,16 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Form State
     const [formData, setFormData] = useState({
         category: "General",
         gender: "Male",
         state: "",
         sector: "Manufacturing",
         stage: "Idea/Prototype",
-        turnover: "", // Changed default to empty string for dropdown
+        turnover: "",
         needs: []
     });
 
-    // Load initial data if editing
     useEffect(() => {
         if (initialData) {
             setFormData({
@@ -37,7 +32,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
         }
     }, [initialData]);
 
-    // --- DATA LISTS ---
     const categories = ["General", "SC", "ST", "OBC", "Minority"];
     const genders = ["Male", "Female", "Other"];
     const sectors = ["Manufacturing", "Service", "Trading", "Agriculture"];
@@ -75,7 +69,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
         setLoading(true);
         setError(null);
 
-        // Validation
         if (!formData.state) {
             setError("Please select your state.");
             setLoading(false);
@@ -103,7 +96,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
             <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl my-8 animation-fade-in">
 
-                {/* Close Button */}
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition text-gray-500"
@@ -111,7 +103,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                     <X className="h-6 w-6" />
                 </button>
 
-                {/* Header */}
                 <div className="p-6 border-b border-gray-100 text-center bg-gray-50 rounded-t-2xl">
                     <h2 className="text-2xl font-bold text-gray-900">
                         {initialData ? "Edit Business Profile" : "Complete Your Profile"}
@@ -121,7 +112,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                     </p>
                 </div>
 
-                {/* Form Body */}
                 <div className="p-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
                     {error && (
                         <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-3 flex items-center gap-3 rounded-r">
@@ -132,7 +122,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
 
-                        {/* Row 1: Gender & Category */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Gender</label>
@@ -153,8 +142,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                                 </select>
                             </div>
                         </div>
-
-                        {/* Row 2: State & Sector */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">State</label>
@@ -176,8 +163,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                                 </select>
                             </div>
                         </div>
-
-                        {/* Row 3: Stage & Turnover (Updated) */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Business Stage</label>
@@ -189,8 +174,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                                 </select>
                             </div>
 
-                            {/* ✅ Updated Turnover Dropdown */}
-                            {/* ✅ CORRECTED: Exact Number Input for Accurate Recommendations */}
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
                                     Annual Turnover (in Rupees)
@@ -206,8 +189,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                                         min="0"
                                     />
                                     <IndianRupee className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
-
-                                    {/* Optional: Helper text to convert numbers to readable format */}
                                     {formData.turnover && (
                                         <p className="absolute right-3 top-3 text-xs text-green-600 font-medium pointer-events-none bg-white px-1">
                                             ₹ {Number(formData.turnover).toLocaleString('en-IN')}
@@ -220,7 +201,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                             </div>
                         </div>
 
-                        {/* Row 4: Needs */}
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Business Needs</label>
                             <div className="flex flex-wrap gap-2">
@@ -239,7 +219,6 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
                             </div>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit" disabled={loading}
                             className="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:bg-blue-700 transition flex justify-center items-center gap-2 disabled:opacity-70 shadow-lg"

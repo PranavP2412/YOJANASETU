@@ -19,13 +19,10 @@ const SchemeDetails = () => {
     useEffect(() => {
         const fetchSchemeDetails = async () => {
             try {
-                // ✅ UPDATED: Changed from GET to POST as requested
                 const response = await axiosClient.get(`/schemes/${id}`);
                 
                 const schemeData = response.data.data;
                 setScheme(schemeData);
-                
-                // If your backend sends 'isBookmarked' in the response, set the initial state
                 if (schemeData.isBookmarked) {
                     setIsBookmarked(true);
                 }
@@ -41,22 +38,16 @@ const SchemeDetails = () => {
         fetchSchemeDetails();
         window.scrollTo(0, 0); 
     }, [id]);
-
-    // --- BOOKMARK HANDLER ---
     const handleBookmark = async () => {
         if (!scheme) return;
         setBookmarkLoading(true);
 
         try {
-            // Sending schemeId in the body via POST method
             await axiosClient.post('/schemes/bookmark', {
                 schemeId: scheme._id 
             });
 
-            // Toggle UI state
             setIsBookmarked(!isBookmarked);
-            // Optional: Show a toast/alert
-            // alert(isBookmarked ? "Removed from Bookmarks" : "Added to Bookmarks");
             
         } catch (err) {
             console.error("Error bookmarking scheme:", err);
@@ -94,7 +85,6 @@ const SchemeDetails = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
-            {/* --- HEADER SECTION --- */}
             <div className="bg-gradient-to-r from-blue-900 to-indigo-900 py-12 text-white">
                 <div className="max-w-5xl mx-auto px-4">
                     <Link to="/schemes" className="inline-flex items-center text-blue-200 hover:text-white mb-6 transition">
@@ -136,11 +126,8 @@ const SchemeDetails = () => {
                 </div>
             </div>
 
-            {/* --- MAIN CONTENT GRID --- */}
             <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
-                    {/* LEFT COLUMN: Details */}
                     <div className="lg:col-span-2 space-y-8">
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                             <h2 className="text-xl font-bold text-gray-900 mb-4">Overview</h2>
@@ -168,7 +155,6 @@ const SchemeDetails = () => {
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN: Sidebar */}
                     <div className="space-y-6">
                         
                         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-6">
@@ -203,7 +189,6 @@ const SchemeDetails = () => {
                                     <Share2 className="h-4 w-4" /> Share
                                 </button>
 
-                                {/* BOOKMARK BUTTON */}
                                 <button 
                                     onClick={handleBookmark}
                                     disabled={bookmarkLoading}

@@ -21,7 +21,6 @@ const ProfilePage = () => {
             const response = await axiosClient.get('/userInfo/userInfoGet'); 
             
             if (response.data && response.data.data) {
-                // Handle nested structure differences if any
                 if(response.data.data.userInfo) {
                     setProfile(response.data.data.userInfo);
                 } else {
@@ -62,7 +61,6 @@ const ProfilePage = () => {
             />
 
             {!profile ? (
-                /* --- STATE 1: CREATE PROFILE --- */
                 <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center">
                     <div className="max-w-lg w-full bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100">
                         <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -83,15 +81,10 @@ const ProfilePage = () => {
                     </div>
                 </div>
             ) : (
-                /* --- STATE 2: SHOW DASHBOARD --- */
+
                 <div className="max-w-4xl mx-auto space-y-6">
-                    
-                    {/* Header Card */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        
-                        {/* 1. BLUE BANNER with Name Inside */}
                         <div className="relative bg-gradient-to-r from-blue-600 to-indigo-600 h-48 px-8 flex items-end pb-6">
-                            {/* Text Container - Pushed right (ml-32) to make room for Avatar */}
                             <div className="ml-0 sm:ml-36 w-full">
                                 <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight drop-shadow-md mb-2">
                                     {user?.FullName}
@@ -101,10 +94,7 @@ const ProfilePage = () => {
                                 </p>
                             </div>
                         </div>
-
-                        {/* 2. White Section with Avatar & Stats */}
                         <div className="px-8 pb-8">
-                            {/* Avatar Section - Pulls up into the blue area */}
                             <div className="relative -mt-20 mb-6 flex justify-between items-end">
                                 <img 
                                     src={"/Profile.png"} 
@@ -119,8 +109,6 @@ const ProfilePage = () => {
                                     <Edit className="h-4 w-4" /> Edit Profile
                                 </button>
                             </div>
-
-                            {/* Quick Stats Grid */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-gray-100 pt-6">
                                 <div className="flex items-center gap-3 p-4 rounded-xl bg-blue-50/50 border border-blue-100/50">
                                     <div className="p-2.5 bg-blue-100 rounded-lg text-blue-600">
@@ -154,10 +142,7 @@ const ProfilePage = () => {
                             </div>
                         </div>
                     </div>
-
-                    {/* Details Section */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Left Column: Personal Info */}
                         <div className="md:col-span-1 space-y-6">
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                                 <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -181,8 +166,6 @@ const ProfilePage = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Right Column: Needs */}
                         <div className="md:col-span-2 space-y-6">
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                                 <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">

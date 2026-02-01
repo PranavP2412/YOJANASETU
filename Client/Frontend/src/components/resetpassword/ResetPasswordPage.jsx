@@ -5,12 +5,9 @@ import { Lock, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import axiosClient from '../../api/axiosClient';
 
 const ResetPasswordPage = () => {
-    // 2. CHANGE THIS LINE: Extract the token from the URL path
     const { resetToken } = useParams(); 
     
     const navigate = useNavigate();
-
-    // Use 'resetToken' (from params) instead of 'token' (from search)
     const [passwords, setPasswords] = useState({ newPassword: '', confirmPassword: '' });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -45,8 +42,6 @@ const ResetPasswordPage = () => {
             setLoading(false);
         }
     };
-
-    // 4. Update check to use 'resetToken'
     if (!resetToken) return <div className="text-center mt-20 text-red-500">Invalid Link (No Token Found)</div>;
 
     if (success) {

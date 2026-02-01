@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'; // 1. Import useRef
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-// 2. FIXED IMPORTS: Added CheckCircle2, XCircle, and ArrowLeft
 import { Loader2, CheckCircle2, XCircle, ArrowLeft } from "lucide-react";
 
 const VerifyEmailToken = () => {
@@ -9,17 +8,14 @@ const VerifyEmailToken = () => {
   const [verificationStatus, setVerificationStatus] = useState('verifying'); 
   const [message, setMessage] = useState('');
 
-  // 3. FIX FOR 400 ERROR: Track if API was already called
   const hasCalledAPI = useRef(false);
 
   useEffect(() => {
-    // 4. STOP DOUBLE CALLS: If already called, do nothing
     if (hasCalledAPI.current) return;
     hasCalledAPI.current = true;
 
     const verifyEmail = async () => {
       try {
-        // Double check this URL matches your backend port (8000 vs 5000?)
         const response = await axios.get(`/auth/verify-email/${token}`);
         
         if (response.status === 200) {
@@ -28,7 +24,6 @@ const VerifyEmailToken = () => {
         }
       } catch (error) {
         setVerificationStatus('error');
-        // If the error happens, we can now safely show the XCircle because it's imported!
         if (error.response && error.response.data && error.response.data.message) {
           setMessage(error.response.data.message);
         } else {
@@ -45,8 +40,7 @@ const VerifyEmailToken = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         
         <div className="bg-white py-8 px-4 shadow-xl sm:rounded-xl sm:px-10 border border-gray-100 text-center">
-          
-          {/* STATE: VERIFYING */}
+        
           {verificationStatus === 'verifying' && (
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
@@ -57,7 +51,6 @@ const VerifyEmailToken = () => {
             </div>
           )}
 
-          {/* STATE: SUCCESS */}
           {verificationStatus === 'success' && (
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
@@ -75,11 +68,9 @@ const VerifyEmailToken = () => {
             </div>
           )}
 
-          {/* STATE: ERROR */}
           {verificationStatus === 'error' && (
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                {/* This line was crashing your app before */}
                 <XCircle className="h-8 w-8 text-red-600" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Verification Failed</h2>

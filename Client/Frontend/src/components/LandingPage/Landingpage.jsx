@@ -4,22 +4,14 @@ import { ArrowRight, Search, ShieldCheck, Zap, Sparkles, TrendingUp } from 'luci
 const LandingPage = () => {
     return (
         <div className="flex flex-col min-h-screen bg-white font-sans overflow-x-hidden">
-
-            {/* --- HERO SECTION --- */}
             <section className="relative pt-20 pb-32 lg:pt-32">
-
-                {/* Background Blob */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[600px] bg-gradient-to-b from-blue-50 via-sky-50 to-white rounded-b-[50%] -z-10"></div>
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
-
-                    {/* Floating Badge */}
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm text-blue-600 text-sm font-semibold mb-8 animate-fade-in-up">
                         <Sparkles className="h-4 w-4 text-sky-400 fill-sky-400" />
                         <span>AI-Powered Grant Matching</span>
                     </div>
-
-                    {/* Headline */}
                     <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6 leading-[1.15]">
                         Find Government Funding, <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-600">
@@ -31,8 +23,6 @@ const LandingPage = () => {
                         Yojanasetu is your smart bridge to government schemes. We scan 1500+ grants to find the ones
                         you actually qualify for—instantly.
                     </p>
-
-                    {/* Action Buttons (Animation Removed) */}
                     <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
                         <Link
                             to="/schemes"
@@ -48,8 +38,6 @@ const LandingPage = () => {
                             Login Account
                         </Link>
                     </div>
-
-                    {/* Glass Stats Card */}
                     <div className="mt-16 mx-auto max-w-4xl bg-white/60 backdrop-blur-xl border border-white/50 shadow-2xl shadow-blue-900/5 rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8">
                         <StatItem value="100+" label="Active Schemes" />
                         <StatItem value="₹15Cr" label="Grants Unlocked" />
@@ -58,8 +46,6 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-
-            {/* --- FEATURES SECTION --- */}
             <section className="py-24 bg-slate-50 relative">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-16">
@@ -86,11 +72,9 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-
-            {/* --- CALL TO ACTION (Bottom) --- */}
             <section className="py-20 px-6">
                 <div className="max-w-5xl mx-auto bg-blue-600 rounded-[2.5rem] p-12 text-center text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden">
-                    {/* Abstract Circles */}
+
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full translate-x-1/3 -translate-y-1/3 blur-2xl"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full -translate-x-1/3 translate-y-1/3 blur-2xl"></div>
 
@@ -113,7 +97,6 @@ const LandingPage = () => {
     );
 };
 
-// --- HELPER COMPONENTS ---
 
 const StatItem = ({ value, label }) => (
     <div className="text-center">
@@ -126,7 +109,6 @@ const StatItem = ({ value, label }) => (
 
 const FeatureCard = ({ icon, title, desc }) => (
     <div className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-2 border border-slate-100">
-        {/* ✅ EXACT COLOR AND STYLE APPLIED: bg-blue-600, rounded-lg */}
         <div className="inline-block bg-blue-600 p-3 rounded-lg mb-6 shadow-lg shadow-blue-500/30 transform group-hover:scale-110 transition-transform duration-300">
             {icon}
         </div>
