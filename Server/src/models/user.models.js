@@ -60,6 +60,10 @@ avatar: {
     userInfo:{
         type:Boolean,
         default:false
+    },
+    isRecommended:{
+        type:Boolean,
+        default:false
     }
 },{
     timestamps:true

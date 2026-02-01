@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Search, ShieldCheck, Zap, Sparkles, TrendingUp } from 'lucide-react';
+import { ArrowRight, Search, Zap, Sparkles, TrendingUp } from 'lucide-react';
 
 const LandingPage = () => {
     return (

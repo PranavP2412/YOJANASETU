@@ -3,13 +3,15 @@ import Navbar from './components/layout/Navbar';
 import LandingPage from './components/LandingPage/Landingpage';
 import SchemeDiscovery from './components/AllScheme/Schemediscovery';
 import LoginPage from './components/Login/LoginPage';
-import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken'; // Make sure to import this
+import VerifyEmailToken from './components/VerifyEmailToken/VerifyEmailToken';
 import ForgotPassword from './components/forgotpassword/ForgotPasswordPage';
 import ResetPassword from './components/resetpassword/ResetPasswordPage';
 import ProfilePage from './components/Profile/profile';
 import RegisterPage from './components/Register/RegisterPage';
 import SchemeDetails from './components/SchemeDetails/SchemeDetails';
 import BookmarksPage from './components/bookMarksPage/bookMarksPage';
+import RecommendedSchemes from './components/recommended/recommendedSchemes';
+
 
 
 // 1. Layout Component (Contains Navbar)
@@ -28,7 +30,6 @@ function App() {
       <div className="min-h-screen bg-gray-50 font-sans">
         <Routes>
 
-          {/* Group 1: Routes WITH Navbar (Everything inside here gets the top bar) */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/schemes" element={<SchemeDiscovery />} />
@@ -37,14 +38,13 @@ function App() {
             <Route path="/Profile" element={<ProfilePage />} />
             
             <Route path="/register" element={<RegisterPage />} />
-
-            {/* ✅ MOVED HERE: Now these will show the Navbar */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/scheme/:id" element={<SchemeDetails />} />
             <Route path='/userInfo/bookmarks' element={<BookmarksPage />}/>
+            <Route path='/recommend' element={<RecommendedSchemes />}/>
+
           </Route>
 
-          {/* Group 2: Routes WITHOUT Navbar */}
           <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
           <Route path="/verify-email/:token" element={<VerifyEmailToken />} />
 

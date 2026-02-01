@@ -4,6 +4,9 @@ import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { validationResult } from "express-validator";
 import { Scheme } from "../models/schemes.models.js";
+import { User } from "../models/user.models.js";
+import { pleaseRecommendFunction } from "../services/pleaseRecommendFunction.js";
+
 
 const userInfoRegistering = asyncHandler(async (req, res) => {
     const errors = validationResult(req);
@@ -18,6 +21,10 @@ const userInfoRegistering = asyncHandler(async (req, res) => {
     const { category, gender, state, sector, stage, turnover, needs } = req.body;
 
     const existingProfile = await UserInfo.findOne({ userId });
+
+    const resetRecommendationFlag = async () => {
+        await User.findByIdAndUpdate(userId, { isRecommended: false });
+    };
     if (existingProfile) {
         existingProfile.category = category;
         existingProfile.gender = gender;
@@ -28,6 +35,7 @@ const userInfoRegistering = asyncHandler(async (req, res) => {
         existingProfile.state = state;
 
         await existingProfile.save();
+        await resetRecommendationFlag();
 
         return res.status(201).json(
         new ApiResponse(201, existingProfile , "User profile details saved successfully")
@@ -75,7 +83,6 @@ const getUserInfo = asyncHandler(async (req, res) => {
 const getBookmarkedSchemes = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
-    // 1. Find User Profile to get the list of IDs
     const userProfile = await UserInfo.findOne({ userId });
 
     if (!userProfile || userProfile.bookmarks.length === 0) {
@@ -84,8 +91,6 @@ const getBookmarkedSchemes = asyncHandler(async (req, res) => {
         );
     }
 
-    // 2. Find all Schemes where the _id is IN the bookmarks array
-    // This converts the list of IDs into actual Scheme objects
     const bookmarkedSchemes = await Scheme.find({
         _id: { $in: userProfile.bookmarks }
     });
@@ -95,4 +100,28 @@ const getBookmarkedSchemes = asyncHandler(async (req, res) => {
     );
 });
 
-export { userInfoRegistering, getUserInfo,getBookmarkedSchemes };
+const getSchemeRecommendations = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    const userInfo = await UserInfo.findOne({ userId });
+
+    if (!userInfo) {
+        throw new ApiError(404, "User profile not found. Please complete your business profile first.");
+    }
+
+    await userInfo.recommend(pleaseRecommendFunction);
+
+    const populatedData = await UserInfo.findOne({ userId })
+        .populate({
+            path: 'recommended.schemeId', // Look inside the 'recommended' array at 'schemeId'
+            select: 'schemeName description benefits agency applicationLink' // Only get fields you need
+        });
+
+    const validRecommendations = populatedData.recommended.filter(rec => rec.schemeId !== null);
+
+    return res.status(200).json(
+        new ApiResponse(200, validRecommendations, "Best fitting schemes fetched successfully")
+    );
+})
+
+export { userInfoRegistering, getUserInfo,getBookmarkedSchemes,getSchemeRecommendations };
