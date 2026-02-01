@@ -34,9 +34,9 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/schemes" element={<SchemeDiscovery />} />
             <Route path="/login" element={<LoginPage />} />
-            
+
             <Route path="/Profile" element={<ProfilePage />} />
-            
+
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/scheme/:id" element={<SchemeDetails />} />
