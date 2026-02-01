@@ -85,10 +85,10 @@ userInfoSchema.methods.findFeasibleSchemes = async function () {
 
     const regexQueries = searchKeywords.map(keyword => ({
         $or: [
-            { tags: { $regex: keyword, $options: "i" } },       // Look in Tags
-            { schemeName: { $regex: keyword, $options: "i" } }, // Look in Name
-            { description: { $regex: keyword, $options: "i" } }, // Look in Description
-            { category: { $regex: keyword, $options: "i" } }     // Look in Category
+            { tags: { $regex: keyword, $options: "i" } },
+            { schemeName: { $regex: keyword, $options: "i" } },
+            { description: { $regex: keyword, $options: "i" } }, 
+            { category: { $regex: keyword, $options: "i" } }    
         ]
     }));
 
@@ -101,13 +101,10 @@ userInfoSchema.methods.findFeasibleSchemes = async function () {
         ]
     };
 
-    // We slightly increased limit to 60 to give AI more variety
     const candidates = await Scheme.find(query)
         .select('_id schemeName description benefits eligibility tags ministry category')
         .limit(60); 
 
-    // If the strict keyword search found nothing (e.g., < 5 schemes), 
-    // fetch distinct random schemes so the user doesn't get an empty page.
     if (candidates.length < 5) {
         console.log("Not enough keyword matches, fetching generic active schemes...");
         const genericSchemes = await Scheme.find({ isActive: true })

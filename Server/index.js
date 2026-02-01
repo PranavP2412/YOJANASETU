@@ -21,22 +21,12 @@ app.use(express.urlencoded({extended:true, limit:"16kb"})); // this is for when 
 app.use(express.static("public"))
 app.use(cookieParser());
 
-//global error handling
-app.use((err, req, res, next) => {
-    console.error("Error caught:", err.message);
-    
-    // Send the response to the client
-    res.status(err.statusCode || 500).json({
-        success: false,
-        message: err.message
-    });
-});
 
 // cors configuration
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173", // Allow your frontend URL
-    credentials: true // Allow cookies to be sent
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    credentials: true 
 }))
 
 
@@ -45,6 +35,15 @@ app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/healthcheck",healthCheckRouter)
 app.use("/api/v1/userInfo",userInfoRouter)
 app.use("/api/v1/schemes",schemesRouter)
+
+app.use((err, req, res, next) => {
+    console.error("Error caught:", err.message);
+    
+    res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message
+    });
+});
 
 connectDB()
 .then(app.listen(process.env.PORT,()=>{

@@ -37,7 +37,7 @@ const ResetPasswordPage = () => {
 
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.message || "Failed to reset password. The link may be expired.");
+            setError(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
         } finally {
             setLoading(false);
         }

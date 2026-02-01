@@ -86,7 +86,7 @@ const CreateProfileModal = ({ isOpen, onClose, onSuccess, initialData }) => {
             onClose();
         } catch (err) {
             console.error("Profile Error:", err);
-            setError(err.response?.data?.message || "Failed to save profile.");
+            setError(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
         } finally {
             setLoading(false);
         }

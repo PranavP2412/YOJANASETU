@@ -18,7 +18,7 @@ const RecommendedSchemes = () => {
                 setSchemes(response.data.data || []);
             } catch (err) {
                 console.error("Error fetching recommendations:", err);
-                setError("Failed to generate recommendations. Please try again later.");
+                setError(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
             } finally {
                 setLoading(false);
             }
@@ -146,7 +146,7 @@ const RecommendedSchemes = () => {
 
                                         <div className="flex flex-col gap-3 lg:w-48 flex-shrink-0 border-t lg:border-t-0 lg:border-l border-gray-100 pt-4 lg:pt-0 lg:pl-6">
                                             <Link 
-                                                to={`/schemes/${schemeId._id}`}
+                                                to={`/scheme/${schemeId._id}`}
                                                 className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-800 transition shadow-sm"
                                             >
                                                 View Details <ArrowRight className="h-4 w-4" />

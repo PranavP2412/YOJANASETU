@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom'; // 1. Added useNavigate
 import axiosClient from '../../api/axiosClient';
 import { 
     ArrowLeft, Building2, Calendar, CheckCircle, 
@@ -8,38 +8,46 @@ import {
 
 const SchemeDetails = () => {
     const { id } = useParams(); 
+    const navigate = useNavigate(); // 2. Initialize navigation
+    
     const [scheme, setScheme] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
-    // State for bookmark status
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [bookmarkLoading, setBookmarkLoading] = useState(false);
 
     useEffect(() => {
-        const fetchSchemeDetails = async () => {
+        const fetchData = async () => {
+            setLoading(true);
             try {
                 const response = await axiosClient.get(`/schemes/${id}`);
-                
                 const schemeData = response.data.data;
                 setScheme(schemeData);
-                if (schemeData.isBookmarked) {
-                    setIsBookmarked(true);
+                try {
+                    const bookmarkResponse = await axiosClient.get(`/schemes/isBookmarked/${id}`);
+                    if (bookmarkResponse.data && bookmarkResponse.data.data) {
+                        setIsBookmarked(bookmarkResponse.data.data.isBookmarked);
+                    }
+                } catch (authError) {
+                    console.log("User not logged in or check failed", authError.message);
                 }
                 
             } catch (err) {
                 console.error("Error fetching scheme details:", err);
-                setError("Failed to load scheme details. It might have been removed.");
+                setError(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchSchemeDetails();
+        fetchData();
         window.scrollTo(0, 0); 
     }, [id]);
+
     const handleBookmark = async () => {
         if (!scheme) return;
+        
         setBookmarkLoading(true);
 
         try {
@@ -51,7 +59,13 @@ const SchemeDetails = () => {
             
         } catch (err) {
             console.error("Error bookmarking scheme:", err);
-            alert("Failed to update bookmark. Please login and try again.");
+            
+            if (err.response && err.response.status === 401) {
+                alert("Please log in to save schemes to your dashboard.");
+                navigate('/login');
+            } else {
+                alert("Failed to update bookmark. Please try again.");
+            }
         } finally {
             setBookmarkLoading(false);
         }

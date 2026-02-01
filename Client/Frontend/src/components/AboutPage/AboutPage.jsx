@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, Globe, Code2, Database } from 'lucide-react';
+import { Github, Linkedin, Mail, Globe, Code2 } from 'lucide-react';
 
 // You don't need to import images if they are in the 'public' folder
 const AboutPage = () => {
@@ -37,7 +37,6 @@ const AboutPage = () => {
     return (
         <div className="min-h-screen bg-white font-sans">
 
-            {/* Header Section */}
             <div className="bg-blue-900 py-20 text-center px-4">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
                     Meet the Builders
@@ -47,7 +46,6 @@ const AboutPage = () => {
                 </p>
             </div>
 
-            {/* Team Grid */}
             <div className="max-w-6xl mx-auto px-6 -mt-16 pb-20">
                 <div className="grid md:grid-cols-2 gap-8 justify-center">
 
@@ -56,19 +54,16 @@ const AboutPage = () => {
                             key={member.id}
                             className="bg-white rounded-3xl shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col md:flex-row"
                         >
-                            {/* Image Section */}
                             <div className="md:w-2/5 bg-blue-50 flex items-center justify-center p-6 relative overflow-hidden">
                                 <div className="absolute inset-0 bg-blue-600/5 opacity-50 blur-xl rounded-full scale-150"></div>
                                 <img
                                     src={member.image}
                                     alt={member.name}
                                     className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-md relative z-10 object-cover"
-                                    // Optional: Add fallback if image fails to load
                                     onError={(e) => { e.target.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=" + member.name }}
                                 />
                             </div>
 
-                            {/* Info Section */}
                             <div className="md:w-3/5 p-8 flex flex-col justify-center">
                                 <div className="mb-4">
                                     <h2 className="text-2xl font-bold text-gray-900">{member.name}</h2>
@@ -81,7 +76,6 @@ const AboutPage = () => {
                                     {member.bio}
                                 </p>
 
-                                {/* Social Links */}
                                 <div className="flex items-center gap-3">
                                     <SocialLink href={member.links.github} icon={<Github className="h-5 w-5" />} />
                                     <SocialLink href={member.links.linkedin} icon={<Linkedin className="h-5 w-5" />} />
@@ -95,7 +89,6 @@ const AboutPage = () => {
                 </div>
             </div>
 
-            {/* Mission Section */}
             <div className="max-w-4xl mx-auto px-6 pb-24 text-center">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Our Mission</h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
@@ -109,7 +102,6 @@ const AboutPage = () => {
     );
 };
 
-// Helper Component for Social Icons
 const SocialLink = ({ href, icon }) => (
     <a
         href={href}

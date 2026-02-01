@@ -41,7 +41,7 @@ const LoginPage = () => {
 
         } catch (err) {
             console.error(err);
-            const errorMessage = err.response?.data?.message || "Something went wrong. Please try again.";
+            const errorMessage = err.response?.data?.message || err.response?.data || "An unexpected error occurred.";
             setError(errorMessage);
             setSuccess(false);
         } finally {

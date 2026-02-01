@@ -11,6 +11,7 @@ import RegisterPage from './components/Register/RegisterPage';
 import SchemeDetails from './components/SchemeDetails/SchemeDetails';
 import BookmarksPage from './components/bookMarksPage/bookMarksPage';
 import RecommendedSchemes from './components/recommended/recommendedSchemes';
+import AboutPage from './components/AboutPage/AboutPage';
 
 
 
@@ -42,6 +43,7 @@ function App() {
             <Route path="/scheme/:id" element={<SchemeDetails />} />
             <Route path='/userInfo/bookmarks' element={<BookmarksPage />}/>
             <Route path='/recommend' element={<RecommendedSchemes />}/>
+            <Route path='/about' element={<AboutPage />}/>
 
           </Route>
 

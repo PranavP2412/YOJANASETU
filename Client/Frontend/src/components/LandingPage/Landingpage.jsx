@@ -1,7 +1,16 @@
+import { useEffect, useState } from 'react'; // 1. Import hooks
 import { Link } from 'react-router-dom';
-import { ArrowRight, Search, Zap, Sparkles, TrendingUp } from 'lucide-react';
+import { ArrowRight, Search, Zap, Sparkles, TrendingUp, LayoutDashboard } from 'lucide-react';
 
 const LandingPage = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // 2. Check for token on component mount
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken"); // Verify your key name is 'accessToken'
+        setIsLoggedIn(!!token);
+    }, []);
+
     return (
         <div className="flex flex-col min-h-screen bg-white font-sans overflow-x-hidden">
             <section className="relative pt-20 pb-32 lg:pt-32">
@@ -23,6 +32,7 @@ const LandingPage = () => {
                         Yojanasetu is your smart bridge to government schemes. We scan 1500+ grants to find the ones
                         you actually qualify for—instantly.
                     </p>
+                    
                     <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
                         <Link
                             to="/schemes"
@@ -31,13 +41,24 @@ const LandingPage = () => {
                             Explore Schemes <ArrowRight className="h-5 w-5" />
                         </Link>
 
-                        <Link
-                            to="/login"
-                            className="px-8 py-4 bg-white text-slate-700 font-bold rounded-2xl shadow-md border border-slate-100 hover:bg-slate-50 hover:border-slate-200 transition-all duration-300 flex items-center justify-center"
-                        >
-                            Login Account
-                        </Link>
+                        {/* 3. Conditionally Render Login vs Dashboard Button */}
+                        {!isLoggedIn ? (
+                            <Link
+                                to="/login"
+                                className="px-8 py-4 bg-white text-slate-700 font-bold rounded-2xl shadow-md border border-slate-100 hover:bg-slate-50 hover:border-slate-200 transition-all duration-300 flex items-center justify-center"
+                            >
+                                Login Account
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/dashboard" // Or wherever your main user area is
+                                className="px-8 py-4 bg-white text-blue-700 font-bold rounded-2xl shadow-md border border-blue-100 hover:bg-blue-50 transition-all duration-300 flex items-center justify-center gap-2"
+                            >
+                                <LayoutDashboard className="h-5 w-5" /> Go to Dashboard
+                            </Link>
+                        )}
                     </div>
+
                     <div className="mt-16 mx-auto max-w-4xl bg-white/60 backdrop-blur-xl border border-white/50 shadow-2xl shadow-blue-900/5 rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8">
                         <StatItem value="100+" label="Active Schemes" />
                         <StatItem value="₹15Cr" label="Grants Unlocked" />
@@ -46,8 +67,13 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
+            
+            {/* ... Rest of your sections (Why Yojanasetu, CTA) ... */}
+            
             <section className="py-24 bg-slate-50 relative">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                 {/* ... (Keep existing code) ... */}
+                 {/* Just hiding FeatureCard details for brevity, keep your original code here */}
+                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-bold text-slate-900">Why Yojanasetu?</h2>
                         <p className="text-slate-500 mt-2 text-lg">We turn complex government documents into simple opportunities.</p>
@@ -72,9 +98,10 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Bottom CTA Section - Also updated logic here */}
             <section className="py-20 px-6">
                 <div className="max-w-5xl mx-auto bg-blue-600 rounded-[2.5rem] p-12 text-center text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden">
-
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full translate-x-1/3 -translate-y-1/3 blur-2xl"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full -translate-x-1/3 translate-y-1/3 blur-2xl"></div>
 
@@ -83,12 +110,22 @@ const LandingPage = () => {
                         <p className="text-blue-100 text-lg mb-8 max-w-xl mx-auto">
                             Join thousands of Indian entrepreneurs who found funding through Yojanasetu today.
                         </p>
-                        <Link
-                            to="/register"
-                            className="inline-block px-10 py-4 bg-white text-blue-600 font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                        >
-                            Get Started for Free
-                        </Link>
+                        
+                        {!isLoggedIn ? (
+                            <Link
+                                to="/register"
+                                className="inline-block px-10 py-4 bg-white text-blue-600 font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                            >
+                                Get Started for Free
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/schemes"
+                                className="inline-block px-10 py-4 bg-white text-blue-600 font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                            >
+                                Find New Schemes
+                            </Link>
+                        )}
                     </div>
                 </div>
             </section>
@@ -96,7 +133,6 @@ const LandingPage = () => {
         </div>
     );
 };
-
 
 const StatItem = ({ value, label }) => (
     <div className="text-center">

@@ -30,7 +30,7 @@ const RegisterPage = () => {
             setSuccessMode(true); 
         } catch (err) {
             console.error("Registration Error:", err);
-            setError(err.response?.data?.message || "Registration failed. Please try again.");
+            setError(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
         } finally {
             setLoading(false);
         }

@@ -19,7 +19,7 @@ const ForgotPassword = () => {
             setStatus('success');
         } catch (error) {
             setStatus('error');
-            setMessage(error.response?.data?.message || "Could not send email. Please try again.");
+            setMessage(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
         }
     };
 

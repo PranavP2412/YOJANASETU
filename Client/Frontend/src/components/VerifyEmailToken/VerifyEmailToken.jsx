@@ -25,7 +25,7 @@ const VerifyEmailToken = () => {
       } catch (error) {
         setVerificationStatus('error');
         if (error.response && error.response.data && error.response.data.message) {
-          setMessage(error.response.data.message);
+          setMessage(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
         } else {
           setMessage('The verification link is invalid or has expired.');
         }

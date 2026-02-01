@@ -124,4 +124,28 @@ const getSchemeRecommendations = asyncHandler(async (req, res) => {
     );
 })
 
-export { userInfoRegistering, getUserInfo,getBookmarkedSchemes,getSchemeRecommendations };
+const checkIsBookmarked = asyncHandler(async (req, res) => {
+    const { id } = req.params; 
+    const userId = req.user._id; 
+
+    // 1. CHANGE: Find UserInfo (where bookmarks actually live), not User
+    const userInfo = await UserInfo.findOne({ userId });
+    
+    // 2. SAFETY CHECK: If no profile exists, they definitely haven't bookmarked anything
+    if (!userInfo || !userInfo.bookmarks) {
+        return res.status(200).json(
+            new ApiResponse(200, { isBookmarked: false }, "User profile not found")
+        );
+    }
+
+    // 3. CHANGE: Use .includes() because your schema defines bookmarks as [String]
+    // The previous .some(...) code was for ObjectIds, which caused errors here.
+    const isBookmarked = userInfo.bookmarks.includes(id);
+
+    return res.status(200).json(
+        new ApiResponse(200, { isBookmarked }, "Bookmark status fetched successfully")
+    );
+});
+
+
+export { userInfoRegistering, getUserInfo,getBookmarkedSchemes,getSchemeRecommendations,checkIsBookmarked };
