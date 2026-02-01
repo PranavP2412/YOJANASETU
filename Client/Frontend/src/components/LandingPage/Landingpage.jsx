@@ -51,7 +51,7 @@ const LandingPage = () => {
                             </Link>
                         ) : (
                             <Link
-                                to="/dashboard" // Or wherever your main user area is
+                                to="/profile" // Or wherever your main user area is
                                 className="px-8 py-4 bg-white text-blue-700 font-bold rounded-2xl shadow-md border border-blue-100 hover:bg-blue-50 transition-all duration-300 flex items-center justify-center gap-2"
                             >
                                 <LayoutDashboard className="h-5 w-5" /> Go to Dashboard
