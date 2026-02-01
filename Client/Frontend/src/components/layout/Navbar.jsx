@@ -8,11 +8,9 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation(); 
     
-    // State for UI
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // State for Data
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -63,12 +61,9 @@ const Navbar = () => {
 
     return (
         <>
-            {/* --- MAIN NAVBAR --- */}
             <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
-                        
-                        {/* LEFT SECTION */}
                         <div className="flex items-center gap-4">
                             {user && (
                                 <button 
@@ -87,12 +82,9 @@ const Navbar = () => {
                             </Link>
                         </div>
 
-                        {/* CENTER SECTION - Added Bookmarks Here */}
                         <div className="hidden md:flex items-center space-x-8">
                             <Link to="/" className="text-gray-600 hover:text-blue-600 font-medium transition">Home</Link>
                             <Link to="/schemes" className="text-gray-600 hover:text-blue-600 font-medium transition">Schemes</Link>
-                            
-                            {/* ✅ NEW: Saved Schemes Link in Navbar (Only if logged in) */}
                             {user && (
                                 <Link to="/userInfo/bookmarks" className="text-gray-600 hover:text-blue-600 font-medium transition flex items-center gap-1">
                                     Saved
@@ -102,12 +94,10 @@ const Navbar = () => {
                             <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium transition">About</Link>
                         </div>
 
-                        {/* RIGHT SECTION */}
                         <div className="flex items-center gap-4">
                             {loading ? (
                                 <div className="h-8 w-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin"></div>
                             ) : user ? (
-                                // LOGGED IN STATE
                                 <button 
                                     onClick={() => setIsSidebarOpen(true)}
                                     className="hidden md:flex items-center gap-2 hover:bg-gray-50 p-1 pr-3 rounded-full border border-transparent hover:border-gray-200 transition"
@@ -120,7 +110,6 @@ const Navbar = () => {
                                     <span className="text-sm font-medium text-gray-700">{user.FullName}</span>
                                 </button>
                             ) : (
-                                // LOGGED OUT STATE
                                 <Link
                                     to="/login"
                                     className="hidden md:flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition shadow-sm hover:shadow-md"
@@ -129,7 +118,6 @@ const Navbar = () => {
                                 </Link>
                             )}
 
-                            {/* Mobile Menu Toggle */}
                             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden text-gray-600">
                                 <Menu className="h-6 w-6" />
                             </button>
@@ -138,7 +126,6 @@ const Navbar = () => {
                 </div>
             </nav>
 
-            {/* --- SIDEBAR DRAWER --- */}
             {user && (
                 <>
                     <div 
@@ -157,8 +144,6 @@ const Navbar = () => {
                                 <X className="h-6 w-6" />
                             </button>
                         </div>
-
-                        {/* Profile Info */}
                         <div className="px-6 pb-6 border-b border-gray-100 flex flex-col items-center text-center">
                             <div className="relative">
                                 <img 
@@ -171,8 +156,6 @@ const Navbar = () => {
                             <h3 className="text-lg font-bold text-gray-900">{user.FullName}</h3>
                             <p className="text-sm text-gray-500">{user.email}</p>
                         </div>
-
-                        {/* Menu Items */}
                         <div className="p-4 space-y-2">
                             <Link 
                                 to="/profile" 
@@ -186,7 +169,6 @@ const Navbar = () => {
                                 <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-400" />
                             </Link>
 
-                            {/* ✅ NEW: Saved Schemes in Sidebar */}
                             <Link 
                                 to="/userInfo/bookmarks" 
                                 className="flex items-center justify-between p-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition group"

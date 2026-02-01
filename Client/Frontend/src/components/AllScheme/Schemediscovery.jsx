@@ -8,36 +8,30 @@ const SchemeDiscovery = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
-    // UI State
     const [searchTerm, setSearchTerm] = useState("");
-    const [isRecommendedMode, setIsRecommendedMode] = useState(false); // Toggle for "Recommended" vs "All"
+    const [isRecommendedMode, setIsRecommendedMode] = useState(false);
 
-    // Pagination State
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    // --- FETCH DATA ---
     useEffect(() => {
         const fetchSchemes = async () => {
             setLoading(true);
             setError(null);
             try {
                 let endpoint = '/schemes';
-                let params = { page }; // Default params
+                let params = { page };
 
-                // Logic: Decide which API to hit
                 if (isRecommendedMode) {
-                    // 1. Fetch Recommended Schemes
-                    endpoint = '/schemes/recommend'; // Assuming this endpoint exists on your backend
+                    endpoint = '/schemes/recommend'; 
                 } else {
-                    // 2. Fetch All Schemes (with Search)
                     endpoint = '/schemes';
                     if (searchTerm) {
-                        params.search = searchTerm; // Add search query to params
+                        params.search = searchTerm;
                     }
                 }
 
-                console.log(`Fetching: ${endpoint}`, params); // Debug Log
+                console.log(`Fetching: ${endpoint}`, params);
 
                 const response = await axiosClient.get(endpoint, { params });
                 
@@ -56,7 +50,6 @@ const SchemeDiscovery = () => {
             }
         };
 
-        // Debounce search to prevent too many API calls while typing
         const timeoutId = setTimeout(() => {
             fetchSchemes();
         }, 500);
@@ -66,19 +59,18 @@ const SchemeDiscovery = () => {
     }, [page, searchTerm, isRecommendedMode]); 
 
 
-    // --- HANDLERS ---
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
-        setPage(1); // Reset to page 1 on new search
+        setPage(1);
         if (isRecommendedMode) {
-            setIsRecommendedMode(false); // Switch back to "All" mode if user starts searching
+            setIsRecommendedMode(false);
         }
     };
 
     const toggleRecommended = () => {
         setIsRecommendedMode(!isRecommendedMode);
-        setSearchTerm(""); // Clear search when switching modes
+        setSearchTerm("");
         setPage(1);
     };
 
@@ -107,7 +99,6 @@ const SchemeDiscovery = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
-            {/* Header */}
             <div className="bg-blue-900 py-16">
                 <div className="max-w-7xl mx-auto px-4 text-center">
                     <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -120,10 +111,7 @@ const SchemeDiscovery = () => {
                         }
                     </p>
 
-                    {/* Search & Recommend Button Row */}
                     <div className="mt-8 max-w-3xl mx-auto flex flex-col md:flex-row gap-4 items-center">
-                        
-                        {/* Search Input */}
                         <div className="relative w-full flex-grow">
                             <input
                                 type="text"
@@ -135,7 +123,6 @@ const SchemeDiscovery = () => {
                             <Search className="absolute left-4 top-4 h-6 w-6 text-gray-400" />
                         </div>
 
-                        {/* Recommend Toggle Button */}
                         <button
                             onClick={toggleRecommended}
                             className={`w-full md:w-auto px-6 py-4 rounded-xl shadow-lg font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap
@@ -154,7 +141,6 @@ const SchemeDiscovery = () => {
                 </div>
             </div>
 
-            {/* Results Grid */}
             <div className="max-w-7xl mx-auto px-4 -mt-8">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 min-h-[500px]">
                     <div className="flex items-center justify-between mb-6">
@@ -187,7 +173,6 @@ const SchemeDiscovery = () => {
                                 )}
                             </div>
 
-                            {/* Pagination Controls (Only show if not in Recommend mode) */}
                             {schemes.length > 0 && !isRecommendedMode && (
                                 <div className="flex justify-center items-center gap-4 pt-6 border-t border-gray-100">
                                     <button

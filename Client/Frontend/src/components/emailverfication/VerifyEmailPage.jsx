@@ -5,9 +5,9 @@ import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 const VerifyEmailPage = () => {
     const [searchParams] = useSearchParams();
-    const token = searchParams.get('token'); // Extract ?token=XYZ from URL
+    const token = searchParams.get('token');
 
-    const [status, setStatus] = useState('verifying'); // verifying | success | error
+    const [status, setStatus] = useState('verifying');
 
     useEffect(() => {
         if (!token) {
@@ -17,7 +17,6 @@ const VerifyEmailPage = () => {
 
         const verify = async () => {
             try {
-                // Send token to backend to validate
                 await axiosClient.post('/auth/verify-email', { token });
                 setStatus('success');
             } catch (error) {
@@ -33,9 +32,6 @@ const VerifyEmailPage = () => {
         <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 bg-gray-50">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
 
-
-
-                {/* Error State */}
                 {status === 'error' && (
 
                     <>

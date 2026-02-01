@@ -30,7 +30,6 @@ const LoginPage = () => {
 
             const { accessToken, user } = response.data.data;
 
-            // New (Matches axiosClient)
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('user', JSON.stringify(user));
 
@@ -53,14 +52,10 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
 
-            {/* Icon Removed from here */}
-
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
 
-                    {/* Header Section */}
                     <div className="mb-8 text-center">
-                        {/* Changed text-2xl to text-3xl for larger size */}
                         <h2 className="text-4xl font-extrabold text-gray-900">
                             Welcome Back
                         </h2>
@@ -69,7 +64,6 @@ const LoginPage = () => {
                         </p>
                     </div>
 
-                    {/* Error Message */}
                     {error && (
                         <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start gap-3">
                             <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
@@ -77,7 +71,6 @@ const LoginPage = () => {
                         </div>
                     )}
 
-                    {/* Success Message */}
                     {success && (
                         <div className="mb-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-md flex items-start gap-3">
                             <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />

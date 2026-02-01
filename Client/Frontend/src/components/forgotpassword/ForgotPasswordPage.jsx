@@ -2,11 +2,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import axiosClient from '../../api/axiosClient'; // Adjust path if needed
+import axiosClient from '../../api/axiosClient';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
-    const [status, setStatus] = useState('idle'); // idle | loading | success | error
+    const [status, setStatus] = useState('idle');
     const [message, setMessage] = useState('');
 
     const handleSubmit = async (e) => {
@@ -15,7 +15,6 @@ const ForgotPassword = () => {
         setMessage('');
 
         try {
-            // POST request to send the reset email
             await axiosClient.post('/auth/reset-password-email', { email });
             setStatus('success');
         } catch (error) {
@@ -24,7 +23,6 @@ const ForgotPassword = () => {
         }
     };
 
-    // 1. Success View (Email Sent)
     if (status === 'success') {
         return (
             <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
@@ -52,7 +50,6 @@ const ForgotPassword = () => {
         );
     }
 
-    // 2. Input Form View
     return (
         <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">

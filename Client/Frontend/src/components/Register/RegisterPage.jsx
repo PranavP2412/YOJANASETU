@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, User, Building2, ArrowRight, Loader2, CheckCircle } from 'lucide-react';
-// ✅ Go up two levels: Register -> Components -> Src -> Api two levels
+import { Mail, Lock, User, Building2, ArrowRight, Loader2 } from 'lucide-react';
 import axiosClient from '../../api/axiosClient';
 
 const RegisterPage = () => {
@@ -14,7 +13,7 @@ const RegisterPage = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [successMode, setSuccessMode] = useState(false); // Shows success screen after signup
+    const [successMode, setSuccessMode] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,9 +26,8 @@ const RegisterPage = () => {
         setError(null);
 
         try {
-            // POST to /auth/register
             await axiosClient.post('/auth/register', formData);
-            setSuccessMode(true); // Switch to "Check your email" view
+            setSuccessMode(true); 
         } catch (err) {
             console.error("Registration Error:", err);
             setError(err.response?.data?.message || "Registration failed. Please try again.");
@@ -38,7 +36,6 @@ const RegisterPage = () => {
         }
     };
 
-    // View 2: Success Message (Check Email)
     if (successMode) {
         return (
             <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 bg-gray-50">
@@ -56,7 +53,6 @@ const RegisterPage = () => {
         );
     }
 
-    // View 1: The Form
     return (
         <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 bg-gray-50 py-12">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
@@ -72,7 +68,6 @@ const RegisterPage = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Full Name */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <div className="relative">
@@ -85,8 +80,6 @@ const RegisterPage = () => {
                             <User className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                         </div>
                     </div>
-
-                    {/* Business Name (Optional but recommended) */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
                         <div className="relative">
@@ -100,7 +93,6 @@ const RegisterPage = () => {
                         </div>
                     </div>
 
-                    {/* Email */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                         <div className="relative">
@@ -114,7 +106,6 @@ const RegisterPage = () => {
                         </div>
                     </div>
 
-                    {/* Password */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                         <div className="relative">
