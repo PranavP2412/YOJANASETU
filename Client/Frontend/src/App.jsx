@@ -10,6 +10,7 @@ import ProfilePage from './components/Profile/profile';
 import RegisterPage from './components/Register/RegisterPage';
 import SchemeDetails from './components/SchemeDetails/SchemeDetails';
 import BookmarksPage from './components/bookMarksPage/bookMarksPage';
+import AboutPage from './components/AboutPage/AboutPage';
 
 
 // 1. Layout Component (Contains Navbar)
@@ -33,15 +34,16 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/schemes" element={<SchemeDiscovery />} />
             <Route path="/login" element={<LoginPage />} />
-            
+
             <Route path="/Profile" element={<ProfilePage />} />
-            
+
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/about" element={<AboutPage />} />
 
             {/* ✅ MOVED HERE: Now these will show the Navbar */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/scheme/:id" element={<SchemeDetails />} />
-            <Route path='/userInfo/bookmarks' element={<BookmarksPage />}/>
+            <Route path='/userInfo/bookmarks' element={<BookmarksPage />} />
           </Route>
 
           {/* Group 2: Routes WITHOUT Navbar */}
