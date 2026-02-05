@@ -25,7 +25,10 @@ app.use(cookieParser());
 // cors configuration
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: [
+        "http://localhost:5173",
+        "https://yojanasetu-frontend-1.onrender.com" 
+    ],
     credentials: true 
 }))
 

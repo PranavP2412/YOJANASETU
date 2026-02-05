@@ -45,7 +45,6 @@ const getSchemes = asyncHandler(async (req, res) => {
 });
 
 const schemeDetail = asyncHandler(async (req, res) => {
-    // Even in a POST request, we can read from URL params if the URL is /schemes/:id
     const _id = req.params.id; 
     const userId = req.user?._id;
 
@@ -55,7 +54,6 @@ const schemeDetail = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Scheme was not found!");
     }
 
-    // Check if bookmarked (so the button shows the correct state)
     let isBookmarked = false;
     if (userId) {
         const userProfile = await UserInfo.findOne({ userId });
@@ -64,7 +62,6 @@ const schemeDetail = asyncHandler(async (req, res) => {
         }
     }
 
-    // Convert to object and append isBookmarked
     const responseData = {
         ...scheme.toObject(),
         isBookmarked
@@ -75,7 +72,7 @@ const schemeDetail = asyncHandler(async (req, res) => {
     );
 })
 const bookmarkScheme = asyncHandler(async (req, res) => {
-    const { schemeId } = req.body; // Getting ID from body
+    const { schemeId } = req.body;
     const userId = req.user._id;
 
     if (!schemeId) {
@@ -88,10 +85,8 @@ const bookmarkScheme = asyncHandler(async (req, res) => {
         throw new ApiError(404, "User profile not found");
     }
 
-    // Toggle the bookmark using the method we added to your Model
     const updatedBookmarks = await userProfile.toggleBookmark(schemeId);
     
-    // Check state for the response message
     const isBookmarked = updatedBookmarks.includes(schemeId);
 
     return res.status(200).json(

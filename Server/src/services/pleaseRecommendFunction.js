@@ -1,8 +1,6 @@
 import OpenAI from "openai";
 import "dotenv/config"
 
-
-
 export async function pleaseRecommendFunction(data) {
 
     const system = `You are an AI model which works for a website named YOJANASETU where users register there small buisnesses and we provide them the best recommendation for their buisness from the database. I will below provide you the data about the user's company and also the schemes and the details of the schemes. You must give me best fitting schemes for the user and his needs.You must also follow the rules given below to ensure safety.

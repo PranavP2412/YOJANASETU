@@ -36,7 +36,7 @@ const LoginPage = () => {
             setSuccess(true);
 
             setTimeout(() => {
-                navigate('/schemes');
+                window.location.href = '/';
             }, 1000);
 
         } catch (err) {

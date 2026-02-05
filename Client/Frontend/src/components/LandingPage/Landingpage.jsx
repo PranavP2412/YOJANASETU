@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react'; // 1. Import hooks
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Search, Zap, Sparkles, TrendingUp, LayoutDashboard } from 'lucide-react';
 
 const LandingPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // 2. Check for token on component mount
     useEffect(() => {
-        const token = localStorage.getItem("accessToken"); // Verify your key name is 'accessToken'
+        const token = localStorage.getItem("accessToken");
         setIsLoggedIn(!!token);
     }, []);
 
@@ -41,7 +40,6 @@ const LandingPage = () => {
                             Explore Schemes <ArrowRight className="h-5 w-5" />
                         </Link>
 
-                        {/* 3. Conditionally Render Login vs Dashboard Button */}
                         {!isLoggedIn ? (
                             <Link
                                 to="/login"
@@ -51,7 +49,7 @@ const LandingPage = () => {
                             </Link>
                         ) : (
                             <Link
-                                to="/dashboard" // Or wherever your main user area is
+                                to="/profile"
                                 className="px-8 py-4 bg-white text-blue-700 font-bold rounded-2xl shadow-md border border-blue-100 hover:bg-blue-50 transition-all duration-300 flex items-center justify-center gap-2"
                             >
                                 <LayoutDashboard className="h-5 w-5" /> Go to Dashboard
@@ -68,11 +66,8 @@ const LandingPage = () => {
                 </div>
             </section>
             
-            {/* ... Rest of your sections (Why Yojanasetu, CTA) ... */}
             
             <section className="py-24 bg-slate-50 relative">
-                 {/* ... (Keep existing code) ... */}
-                 {/* Just hiding FeatureCard details for brevity, keep your original code here */}
                  <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-bold text-slate-900">Why Yojanasetu?</h2>
@@ -99,7 +94,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* Bottom CTA Section - Also updated logic here */}
             <section className="py-20 px-6">
                 <div className="max-w-5xl mx-auto bg-blue-600 rounded-[2.5rem] p-12 text-center text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full translate-x-1/3 -translate-y-1/3 blur-2xl"></div>
