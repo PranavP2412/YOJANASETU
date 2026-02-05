@@ -1,84 +1,138 @@
-# 🚀 YojanaSetu - AI-Powered Government Scheme Discovery
+# <div align="center" style="color: #133E87;">
+    <a href="https://github.com/PranavP2412/YOJANASETU">
+<strong>YojanaSetu</strong></div>
 
-> **Bridging the gap between Entrepreneurs and Government Funding.**
-)
-![Project Banner]
-*(Replace this link with a screenshot of your Landing Page)*
+<div align="center">Bridging Entrepreneurs to Government Funding<br>AI-Powered Scheme Discovery Platform
+(Mini Project)</div>
 
-## 📖 About The Project
+<hr>
 
-Finding the right government scheme (Grant, Loan, or Subsidy) is often like finding a needle in a haystack. With thousands of schemes available, entrepreneurs struggle to identify which ones they actually qualify for.
+## 📝 Description
 
-**YojanaSetu** is a smart platform that solves this problem. We don't just search; we **consult**. By analyzing a user's business profile (Turnover, Sector, Stage, Needs), our AI engine filters through the noise and recommends the top schemes with a calculated **Match Score**.
+YojanaSetu is an innovative web application designed to democratize access to government funding. Key objectives include:
 
----
+- **Intelligent Discovery**: Replace manual searching with AI-driven matching logic.
+- **Smart Consultation**: Analyze business profiles (Turnover, Sector, Stage) to find the perfect scheme fit.
+- **Complexity Reduction**: Decode complex government eligibility criteria into simple "Match Scores" and reasons.
+- **Centralized Dashboard**: Manage saved schemes, track eligibility, and access application links in one place.
 
-## ✨ Key Features
+The platform focuses on simplifying the grant discovery process by offering intelligent regex filtering combined with Generative AI reasoning. By leveraging modern web technologies and OpenAI, YojanaSetu aims to help MSMEs and Startups unlock capital faster.
 
-- **🤖 AI Recommendation Engine:** Uses OpenAI to analyze eligibility criteria and rank schemes based on user profile.
-- **📊 Match Score & Reasoning:** Doesn't just list schemes; tells you *why* it fits (e.g., "95% Match - Fits your Manufacturing sector needs").
-- **🔍 Smart Discovery:** Hybrid search system combining MongoDB text search with AI reasoning.
-- **🏢 Business Profile Management:** Users can update their turnover, sector, and needs to get real-time updated recommendations.
-- **🔖 Bookmark & Save:** Save promising schemes to your dashboard for later application.
-- **📱 Responsive Design:** Built with React & Tailwind CSS for a seamless experience on mobile and desktop.
-- **🔐 Secure Authentication:** JWT-based robust authentication system.
+## 🔗 Links
 
----
+- [GitHub Repository](https://github.com/PranavP2412/YOJANASETU)
+- [Project Demo Video](#) - [Hosted Website](#) - [Backend API](#) ## 🤖 Tech Stack
 
-## 🛠️ Tech Stack
+### Front-end
+<p>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="40" height="40" alt="React"/>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" height="40" alt="JavaScript"/>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="40" height="40" alt="HTML5"/>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="40" height="40" alt="CSS3"/>
+   <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" width="40" height="40" alt="Tailwind CSS" />
+</p>
 
-### Frontend
-- **React.js** (Vite)
-- **Tailwind CSS** (Styling)
-- **Lucide React** (Icons)
-- **Axios** (API integration)
+### UI Components and Assets
+<p>
+   <img src="https://lucide.dev/logo.light.svg" width="40" height="40" alt="Lucide React"/>
+   <img src="https://vitejs.dev/logo.svg" width="40" height="40" alt="Vite"/>
+</p>
 
-### Backend
-- **Node.js** & **Express.js**
-- **OpenAI API** (Intelligence layer)
-- **Mongoose** (ODM)
+### Back-end
+<p>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="40" height="40" alt="Node.js"/>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" width="40" height="40" alt="Express.js"/>
+</p>
 
 ### Database
-- **MongoDB** (Data storage)
+<p>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="40" height="40" alt="MongoDB"/>
+</p>
 
----
+### AI & Intelligence
+<p>
+   <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" width="40" height="40" alt="OpenAI API"/>
+</p>
 
-## 🧠 How the Recommendation Engine Works
+## 📈 Progress
 
-We built a unique **3-Stage Filtering Process** to ensure speed and accuracy:
+### Fully Implemented Features
+- User Authentication (JWT)
+- Business Profile Management (Sector, Turnover, Needs)
+- Hybrid Search (Regex + Tag Filtering)
+- AI Recommendation Engine (OpenAI Integration)
+- Bookmark/Save Schemes
+- Responsive UI with Tailwind CSS
 
-1.  **Pre-Filtering (Database Layer):** - The system runs a smart Regex & Tag search on the database to shortlist ~50 relevant candidates based on the user's Sector and Needs.
-2.  **AI Analysis (Intelligence Layer):**
-    - These candidates are sent to the OpenAI model along with the User's Profile.
-    - The AI reads the complex "Eligibility" text of each scheme.
-3.  **Ranking & Scoring:**
-    - The AI returns the **Top 5** schemes, assigning a **Match Score (0-100%)** and a one-line **Reason** for the recommendation.
+### Partially Implemented Features
+- Multilingual Support
+- Automated Application Form Filling
+- Document Locker
 
----
+## 🔮 Future Scope
+- **Vernacular Language Support**: Making schemes accessible in regional Indian languages.
+- **Document Verification**: OCR-based automatic document checking.
+- **Community Forum**: Connecting entrepreneurs with past beneficiaries.
+- **Whatsapp Bot Integration**: For easier access via mobile.
 
-## 📸 Screenshots
+## 💸 Applications
+- MSME & Startup Funding
+- Agricultural Subsidy Discovery
+- Educational Grants & Loans
+- Women Entrepreneurship Support
 
-| Landing Page | Recommendation Page |
-|:---:|:---:|
-| ![Landing](https://via.placeholder.com/400x200?text=Landing+Page) | ![Recommend](https://via.placeholder.com/400x200?text=AI+Results) |
-
-| Scheme Details | Dashboard |
-|:---:|:---:|
-| ![Details](https://via.placeholder.com/400x200?text=Scheme+Details) | ![Dashboard](https://via.placeholder.com/400x200?text=User+Dashboard) |
-
-*(Upload your actual screenshots to the repo and link them here)*
-
----
-
-## 🚀 Getting Started locally
-
-Follow these steps to set up the project locally.
-
-### Prerequisites
-- Node.js (v16 or higher)
-- MongoDB installed locally or a MongoDB Atlas connection string.
-
-### 1. Clone the Repository
+## 🛠 Project Setup
+### For the Web App
+1. Clone the GitHub repository
 ```bash
-git clone [https://github.com/your-username/yojanasetu.git](https://github.com/your-username/yojanasetu.git)
-cd yojanasetu
+git clone https://github.com/PranavP2412/YOJANASETU
+```
+
+2. Install Frontend Dependencies
+```bash
+cd frontend
+npm install
+npm start
+```
+
+3. Install Backend Dependencies
+```bash
+cd backend
+npm install
+nodemon server.js
+```
+
+
+## 👨‍💻 Team Members
+- [Pranav Patil](https://github.com/PranavP2412)
+- [Krish Ahirkar](https://github.com/Krishahirkar)
+
+
+#### Landing Page
+![Landing Page](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/Landing.png)
+
+#### User Login
+![User Login](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/userlogin.png)
+
+#### Create Account Page 
+![Create Account Page](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/createaccount.png)
+
+#### Create Profile Page
+![Create Profile Page](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/profile%20.png)
+
+#### Profile Page 
+![Profile Page](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/profilesection.png)
+
+#### Scheme Dashboard Page 
+![Scheme Dashboard Pagw](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/dashboard.png)
+
+#### Scheme Detail Page
+![Scheme Detail Page](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/Schemedetail.png)
+
+#### Scheme Saved
+![Scheme Saved](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/Saved.png)
+
+#### Recommendation Page 
+![Recommendation Page](https://github.com/PranavP2412/YOJANASETU/blob/master/Client/Frontend/src/assests/Recommedation.png)
+
+
