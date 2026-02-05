@@ -21,7 +21,9 @@ The platform focuses on simplifying the grant discovery process by offering inte
 ## 🔗 Links
 
 - [GitHub Repository](https://github.com/PranavP2412/YOJANASETU)
-- [Project Demo Video](#) - [Hosted Website](#) - [Backend API](#) ## 🤖 Tech Stack
+- [Project Demo Video](#) - [Hosted Website](#) - [Backend API](#)
+
+ ## 🤖 Tech Stack
 
 ### Front-end
 <p>
