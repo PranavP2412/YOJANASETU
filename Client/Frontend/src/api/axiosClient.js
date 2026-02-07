@@ -9,10 +9,8 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-    // 1. Get token from Local Storage
     const token = localStorage.getItem('accessToken'); 
     
-    // 2. Attach to Header
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

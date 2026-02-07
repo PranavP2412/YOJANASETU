@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, User, Building2, ArrowRight, Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import axiosClient from '../../api/axiosClient';
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
+    
+    // Removed 'username' from state
     const [formData, setFormData] = useState({
         FullName: '',
-        username: '',
         email: '',
         password: ''
     });
@@ -20,18 +23,54 @@ const RegisterPage = () => {
         if (error) setError(null);
     };
 
+    // Standard Registration (Email/Pass)
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
-            await axiosClient.post('/auth/register', formData);
+            // Auto-generate username from email (to satisfy backend requirement)
+            const payload = {
+                ...formData,
+                username: formData.email.split('@')[0] 
+            };
+
+            await axiosClient.post('/auth/register', payload);
             setSuccessMode(true); 
         } catch (err) {
             console.error("Registration Error:", err);
             setError(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
         } finally {
+            setLoading(false);
+        }
+    };
+
+    // Google Registration Handler
+    const handleGoogleSuccess = async (credentialResponse) => {
+        setLoading(true);
+        setError(null);
+        try {
+            // Use the same endpoint as login - it handles creation too
+            const response = await axiosClient.post('/auth/google', {
+                token: credentialResponse.credential
+            });
+            
+            const { accessToken, user } = response.data.data || response.data;
+
+            // Save session
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            // Update Navbar
+            window.dispatchEvent(new Event("auth-change"));
+
+            // Redirect immediately (Google users are auto-verified)
+            navigate('/'); 
+
+        } catch (err) {
+            console.error("Google Signup Error:", err);
+            setError("Google sign-up failed. Please try again.");
             setLoading(false);
         }
     };
@@ -48,6 +87,12 @@ const RegisterPage = () => {
                         We've sent a verification link to <span className="font-semibold text-gray-900">{formData.email}</span>.
                         Please verify your email to access the dashboard.
                     </p>
+                    
+                    <div className="mt-6">
+                        <Link to="/login" className="text-blue-600 font-medium hover:underline">
+                            Back to Login
+                        </Link>
+                    </div>
                 </div>
             </div>
         );
@@ -78,18 +123,6 @@ const RegisterPage = () => {
                                 placeholder="John Doe"
                             />
                             <User className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                        <div className="relative">
-                            <input
-                                type="text" name="username" required
-                                value={formData.username} onChange={handleChange}
-                                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 outline-none"
-                                placeholder="John_Doe"
-                            />
-                            <Building2 className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                         </div>
                     </div>
 
@@ -127,6 +160,35 @@ const RegisterPage = () => {
                         {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Create Account <ArrowRight className="h-5 w-5" /></>}
                     </button>
                 </form>
+
+                {/* Google Login Section */}
+                <div className="mt-6">
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300" />
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white text-gray-500">
+                                Or sign up with
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 flex justify-center w-full">
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => {
+                                console.error('Google Signup Failed');
+                                setError('Google sign-up was unsuccessful.');
+                            }}
+                            useOneTap
+                            text="signup_with"
+                            theme="filled_blue"
+                            shape="pill"
+                            width="100%"
+                        />
+                    </div>
+                </div>
 
                 <div className="mt-8 text-center text-sm text-gray-500">
                     Already have an account?{' '}

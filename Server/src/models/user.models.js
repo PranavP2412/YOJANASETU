@@ -14,14 +14,6 @@ avatar: {
         default: "" 
     }
 },
-    username:{
-        type:String,
-        required:true,
-        unique:true,
-        lowercase:true,
-        trim:true,
-        index:true
-    },
     FullName:{
         type:String,
         required:true,
@@ -64,6 +56,10 @@ avatar: {
     isRecommended:{
         type:Boolean,
         default:false
+    },
+    authProvider:{
+        type:String,
+        default:'google'
     }
 },{
     timestamps:true

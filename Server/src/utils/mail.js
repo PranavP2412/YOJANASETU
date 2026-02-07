@@ -1,84 +1,84 @@
 import Mailgen from "mailgen";
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
 
-const sendEmail = async (options)=>{
-    const mailGenerator = new Mailgen({
-        theme:"default",
-        product:{
-            name:"YojanaSetu",
-            link:"https://YojanaSetu.com"
-        }
-    })
+dotenv.config({
+    path: ['.env.local', '.env'] 
+});
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS 
+    }
+});
 
+const mailGenerator = new Mailgen({
+    theme: "default",
+    product: {
+        name: "YojanaSetu",
+        link: "https://yojanasetu-frontend-1.onrender.com"
+    }
+});
 
-    const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent)
-    const emailHTML = mailGenerator.generate(options.mailgenContent)
-
-    const transporter = nodemailer.createTransport({
-        host: process.env.MAILTRAP_SMTP_HOST,
-        port:process.env.MAILTRAP_SMTP_PORT,
-        auth:{
-            user:process.env.MAILTRAP_SMTP_USER,
-            pass:process.env.MAILTRAP_SMTP_PASS
-        
-        }
-    })
+const sendEmail = async (options) => {
+    const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent);
+    const emailHTML = mailGenerator.generate(options.mailgenContent);
 
     const mail = {
-        from: "pranavpatil69216@gmail.com",
-        to:options.email,
+        from: `YojanaSetu <${process.env.EMAIL_USER}>`,
+        to: options.email,
         subject: options.subject,
-        text:emailTextual,
+        text: emailTextual,
         html: emailHTML
-    }
+    };
 
     try {
-        await transporter.sendMail(mail)
+        await transporter.sendMail(mail);
+        console.log(`Email sent successfully to ${options.email}`);
     } catch (error) {
-        console.error("Please Provide correct email address !");
-        console.error("error",error)
+        console.error("Email service failed:", error);
     }
-}
+};
 
-
-const emailVerificationMailgenContent = (username, verificationUrl)=>{
+const emailVerificationMailgenContent = (username, verificationUrl) => {
     return {
-        body:{
-            name:username,
-            intro:"Welcome to our YOJANASETU app. We are excited to have you on board.",
-            action:{
-                instruction:"To verify your email please click on the following button!",
-                button:{
-                    color:"rgb(35, 219, 115)",
-                    text:"verify your email",
+        body: {
+            name: username,
+            intro: "Welcome to YojanaSetu! We are excited to have you on board.",
+            action: {
+                instruction: "To verify your email please click on the following button:",
+                button: {
+                    color: "rgb(35, 219, 115)",
+                    text: "Verify Your Email",
                     link: verificationUrl
                 }
             },
-            outro:"Need help, or have questions? Just reply to this email, we'd love to help."
+            outro: "Need help? Just reply to this email."
         }
-    }
-}
+    };
+};
 
-const forgotPasswordMailgenContent = (username, passwordResetUrl)=>{
+const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
     return {
-        body:{
-            name:username,
-            intro:"We got a request to reset the password of your account.",
-            action:{
-                instruction:"To reset your Password please click on the following button!",
-                button:{
-                    color:"rgb(43, 206, 114)",
-                    text:"Reset Password",
+        body: {
+            name: username,
+            intro: "We received a request to reset the password for your account.",
+            action: {
+                instruction: "To reset your password, please click the button below:",
+                button: {
+                    color: "rgb(43, 206, 114)",
+                    text: "Reset Password",
                     link: passwordResetUrl
                 }
             },
-            outro:"Need help, or have questions? Just reply to this email, we'd love to help."
+            outro: "If you did not request a password reset, no further action is required."
         }
-    }
-}
+    };
+};
 
 export {
     emailVerificationMailgenContent,
     forgotPasswordMailgenContent,
     sendEmail
-}
+};
