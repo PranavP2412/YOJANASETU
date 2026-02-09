@@ -71,6 +71,7 @@ const googleLogin = asyncHandler(async (req, res) => {
                 new ApiResponse(200, {
                     user: loggedInUser,
                     accessToken,
+                    refreshToken
                 }, "Google Login Successful")
             );
 
@@ -83,9 +84,7 @@ const googleLogin = asyncHandler(async (req, res) => {
 const resgisterUser = asyncHandler(async (req, res) => {
     const { email, password, FullName } = req.body;
 
-    const existingUser = await User.findOne({
-        $or: [{ username }, { email }]
-    });
+    const existingUser = await User.findOne({ email });
 
     if (existingUser) {
         throw new ApiError(409, "User with email or username already exists!", []);
@@ -105,7 +104,7 @@ const resgisterUser = asyncHandler(async (req, res) => {
     await sendEmail({
         email: user?.email,
         subject: "Please verify your email!!",
-        mailgenContent: emailVerificationMailgenContent(user.username, `https://yojanasetu-frontend-1.onrender.com/verify-email/${unHashedToken}`)
+        mailgenContent: emailVerificationMailgenContent(user.FullName, `https://yojanasetu-frontend-1.onrender.com/verify-email/${unHashedToken}`)
     });
 
     const createdUser = await User.findById(user._id).select(
@@ -147,7 +146,8 @@ const login = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(200, {
                 user: loggedInUser,
-                accessToken
+                accessToken,
+                refreshToken
             },
             "user logged in successfully")
         );
@@ -212,7 +212,7 @@ const resetPasswordEmail = asyncHandler(async (req, res) => {
     await sendEmail({
         email: email,
         subject: "Please reset your password",
-        mailgenContent: forgotPasswordMailgenContent(user.username, `https://yojanasetu-frontend-1.onrender.com/reset-password/${unHashedToken}`)
+        mailgenContent: forgotPasswordMailgenContent(user.FullName, `https://yojanasetu-frontend-1.onrender.com/reset-password/${unHashedToken}`)
     });
 
     return res.status(201).json(new ApiResponse(200, {}, "User password reset link has been sent to your email"));

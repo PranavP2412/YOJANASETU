@@ -41,10 +41,10 @@ const sendEmail = async (options) => {
     }
 };
 
-const emailVerificationMailgenContent = (username, verificationUrl) => {
+const emailVerificationMailgenContent = (FullName, verificationUrl) => {
     return {
         body: {
-            name: username,
+            name: FullName,
             intro: "Welcome to YojanaSetu! We are excited to have you on board.",
             action: {
                 instruction: "To verify your email please click on the following button:",
@@ -59,10 +59,10 @@ const emailVerificationMailgenContent = (username, verificationUrl) => {
     };
 };
 
-const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
+const forgotPasswordMailgenContent = (FullName, passwordResetUrl) => {
     return {
         body: {
-            name: username,
+            name: FullName,
             intro: "We received a request to reset the password for your account.",
             action: {
                 instruction: "To reset your password, please click the button below:",
