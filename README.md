@@ -92,14 +92,14 @@ git clone https://github.com/PranavP2412/YOJANASETU
 
 2. Install Frontend Dependencies
 ```bash
-cd frontend
+cd ./client/frontend
 npm install
 npm start
 ```
 
 3. Install Backend Dependencies
 ```bash
-cd backend
+cd server
 npm install
 nodemon server.js
 ```
