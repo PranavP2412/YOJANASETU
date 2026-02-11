@@ -67,6 +67,7 @@ const googleLogin = asyncHandler(async (req, res) => {
         return res.status(200)
             .cookie("accessToken", accessToken, options)
             .cookie("refreshToken", refreshToken, options)
+            .setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups')
             .json(
                 new ApiResponse(200, {
                     user: loggedInUser,
