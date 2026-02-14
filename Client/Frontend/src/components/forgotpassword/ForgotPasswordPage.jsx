@@ -17,7 +17,7 @@ const ForgotPassword = () => {
         try {
             await axiosClient.post('/auth/reset-password-email', { email });
             setStatus('success');
-        } catch (error) {
+        } catch (err) {
             setStatus('error');
             setMessage(err.response?.data?.message || err.response?.data || "An unexpected error occurred.");
         }

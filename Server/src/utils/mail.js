@@ -20,24 +20,28 @@ const mailGenerator = new Mailgen({
         link: "https://yojanasetu-frontend-1.onrender.com"
     }
 });
-
 const sendEmail = async (options) => {
-    const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent);
+    // Generate content
     const emailHTML = mailGenerator.generate(options.mailgenContent);
 
     const mail = {
         from: `YojanaSetu <${process.env.EMAIL_USER}>`,
         to: options.email,
         subject: options.subject,
-        text: emailTextual,
         html: emailHTML
     };
 
     try {
-        await transporter.sendMail(mail);
-        console.log(`Email sent successfully to ${options.email}`);
+        // VERIFY transporter first to check connection
+        await transporter.verify(); 
+        
+        const info = await transporter.sendMail(mail);
+        console.log("Email sent! Message ID:", info.messageId);
+        return info;
     } catch (error) {
-        console.error("Email service failed:", error);
+        // Log the SPECIFIC SMTP error code
+        console.error("SMTP Error Details:", error.code, error.command, error.response);
+        throw error; // Throw so controller knows it failed
     }
 };
 

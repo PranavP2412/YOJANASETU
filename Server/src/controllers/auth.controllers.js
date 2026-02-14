@@ -67,7 +67,7 @@ const googleLogin = asyncHandler(async (req, res) => {
         return res.status(200)
             .cookie("accessToken", accessToken, options)
             .cookie("refreshToken", refreshToken, options)
-            .setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups')
+            .SetHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups')
             .json(
                 new ApiResponse(200, {
                     user: loggedInUser,
@@ -202,7 +202,7 @@ const resetPasswordEmail = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email: email });
     if (!user) {
-        throw new ApiError(500, "This email id is not registered!");
+        throw new ApiError(404, "This email id is not registered!");
     }
 
     const { unHashedToken, hashedToken, tokenExpiry } = user.generateTemporaryToken();
